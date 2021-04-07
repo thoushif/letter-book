@@ -1,2 +1,2 @@
-# letter-book
-letter-book
+# scribe-vibe
+Created with CodeSandbox

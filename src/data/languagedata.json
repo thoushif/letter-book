@@ -1,0 +1,18 @@
+[
+  {
+    "_id": "605cfa178e9ae12a7139c323",
+    "index": 0,
+    "language": "english",
+    "isActive": true,
+    "seperator": ",",
+    "alphabets": "A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z"
+  },
+  {
+    "_id": "605cfa1756e0c537a06237c4",
+    "index": 1,
+    "language": "telugu",
+    "isActive": true,
+    "seperator": ",",
+    "alphabets": "అ,ఆ,ఇ,ఈ,ఉ,ఊ,ఋ,ౠ,ఌ,ౡ,ఎ,ఏ,ఐ,ఒ,ఓ,ఔ,అఁ,అం,అః"
+  }
+]

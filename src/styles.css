@@ -1,0 +1,46 @@
+body {
+  background-color: #dfdcda;
+}
+/* trbl */
+
+.language {
+  text-decoration: none;
+}
+
+.name-title {
+  text-decoration: none;
+  font-size: 20px;
+  color: black;
+}
+
+.circleBase {
+  border-radius: 50%;
+  border: 0.5px outset white;
+  /* border: 1px; */
+  padding: 2px;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.type1 {
+  width: 5px;
+  height: 5px;
+}
+.type2 {
+  width: 10px;
+  height: 10px;
+}
+.type3 {
+  width: 15px;
+  height: 15px;
+}
+.draw {
+  margin: auto 40px;
+}
+
+.show-only-drawn {
+  float: right;
+}
+.letter-head {
+  font-size: 5rem;
+}
