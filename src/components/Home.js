@@ -8,8 +8,9 @@ import { UserContext } from "./providers/UserProvider";
 
 import ShowNames from "./ShowNames/ShowNames";
 import LetterPreview from "./ShowNames/LetterPreview";
-import HomeIcon from "@material-ui/icons/Home";
+import MenuBookIcon from "@material-ui/icons/MenuBook";
 import { Typography } from "@material-ui/core";
+import { HeaderLogo } from "./Header/HeaderLogo";
 
 export default function Home() {
   const user = useContext(UserContext);
@@ -17,11 +18,13 @@ export default function Home() {
     <Router>
       <Container>
         <Link className="name-title" to="/">
-          <HomeIcon /> Hello, {user.displayName}
+          <HeaderLogo />
+          {/* <MenuBookIcon color="action" /> */}
         </Link>
         <Button className="logout" onClick={logOut}>
           Logout
         </Button>
+        <Typography variant="subtitle1">Hi {user.displayName} !</Typography>
         <MenuItemContainer>
           {/* <Link to="/see-your-name">See Your Name</Link> */}
           {/* <LanguageItem key="all-languages">
@@ -45,7 +48,7 @@ export default function Home() {
 // Home Page
 const Header = () => (
   <Fragment>
-    <FakeText />
+    <SiteDetails />
   </Fragment>
 );
 // Draw Page
@@ -56,7 +59,7 @@ const Draw = () => (
   </Fragment>
 );
 
-const FakeText = () => (
+export const SiteDetails = () => (
   <Typography>
     <p>
       The Place where you can show how do you draw the letters of your language
@@ -66,7 +69,6 @@ const FakeText = () => (
       quality of your letter
     </p>
     <p>
-      These are the languages currently we can support!
       <Languages />
     </p>
   </Typography>
@@ -83,7 +85,12 @@ const Button = styled.button`
   float: right;
 `;
 const Container = styled.div`
-  margin: 0 100px 10px 100px;
+  /* trbl */
+  margin: 0 250px 10px 250px;
+  @media (max-width: 1000px) {
+    flex-direction: column;
+    margin: 0 50px 10px 50px;
+  }
   /* display: inline-flex; */
 `;
 

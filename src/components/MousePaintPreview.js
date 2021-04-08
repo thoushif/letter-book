@@ -80,7 +80,7 @@ export default function MousePaintPreview({ lang, letter }) {
   };
 
   const getCanvasAllOthersData = (letter) => {
-    console.log("working with letter ", letter);
+    // console.log("working with letter ", letter);
     // const userObj = db.collection("users").doc(userId).collection("canvasObjects").doc(letter);
     let canvasDBObj;
     db.collection("canvasObjects")
@@ -92,12 +92,6 @@ export default function MousePaintPreview({ lang, letter }) {
           // doc.data() is never undefined for query doc snapshots
           canvasDBObj = doc.data();
           if (canvasDBObj.userId !== userObj.uid) {
-            console.log(
-              canvasDBObj.userId,
-              "also wirteent ",
-              canvasDBObj.letter
-            );
-
             setOtherPaints((otherPaints) => [...otherPaints, canvasDBObj]);
           }
         });

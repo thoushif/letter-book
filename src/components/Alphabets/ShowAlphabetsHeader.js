@@ -1,27 +1,25 @@
 import { Chip } from "@material-ui/core";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import styled from "styled-components";
-export const ShowAlphabets = ({ alphabets, lang }) => {
+export const ShowAlphabetsHeader = ({ alphabets, lang }) => {
   const history = useHistory();
   const routeChange = (lang, alphabet) => {
     let path = `/draw/${lang}/${alphabet}`;
     history.push(path);
   };
-  const deletethisAlphabet = (lang, alphabet) => {
-    console.log("dleteing", alphabet);
-  };
   return (
     <AlphabetItemContainer>
+      {/* {alphabetsObjs.length} */}
       {alphabets &&
-        alphabets.split(",").map((alphabet) => (
+        alphabets.map((alphabetsObj) => (
           // <AlphabetItem key={alphabet}>
           <Chip
-            key={alphabet}
+            key={alphabetsObj.alphabet}
             color="primary"
-            label={alphabet.toUpperCase()}
+            label={alphabetsObj.alphabet.toUpperCase()}
             // size="small"
             // deleteIcon={<ClearIcon />}
-            onClick={() => routeChange(lang, alphabet)}
+            onClick={() => routeChange(lang, alphabetsObj.alphabet)}
             // onDelete={() => deletethisAlphabet(lang, alphabet)}
             // avatar={<Avatar>{alphabet.toUpperCase()}</Avatar>}
           />

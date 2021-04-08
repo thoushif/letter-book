@@ -14,7 +14,8 @@ import {
   Divider,
   Grid,
   makeStyles,
-  Tooltip
+  Tooltip,
+  Typography
 } from "@material-ui/core";
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -57,7 +58,6 @@ export default function MousePaint(props) {
   const [error, setError] = useState("=======================================");
 
   const saveDrawingToDB = (canvasData, letter) => {
-    console.log("here goes code to save ", canvasData, letter, userObj.uid);
     const canvasDBObj = db
       .collection("canvasObjects")
       .doc(letter)
@@ -110,7 +110,7 @@ export default function MousePaint(props) {
       <h3>
         Drawing...{letter} <small>({lang})</small>
       </h3>
-      <Grid container justify="center" spacing="1">
+      <Grid container justify="center" spacing={1}>
         <Grid key="1" item xs={8}>
           <SliderPicker
             color={state.color}
@@ -190,6 +190,24 @@ export default function MousePaint(props) {
               </Tooltip>
             </Button>
             <Button
+              onClick={() => {
+                if (!thisCanvas.current.getSaveData().includes("points")) {
+                  setError("============ Draw something! =============");
+                  return false;
+                }
+                saveDrawingToDB(
+                  thisCanvas.current.getSaveData(),
+                  letter,
+                  userObj.uid
+                );
+                setShowCanvas();
+              }}
+            >
+              <Tooltip title="Save">
+                <SaveRoundedIcon style={{ fill: "#00ab66" }} fontSize="small" />
+              </Tooltip>
+            </Button>{" "}
+            <Button
               styles={{ float: "right" }}
               onClick={() => {
                 if (!thisCanvas.current.getSaveData().includes("points")) {
@@ -203,31 +221,13 @@ export default function MousePaint(props) {
               }}
             >
               <Tooltip title="Cancel and go back">
-                <ClearRoundedIcon fontSize="small" />
-              </Tooltip>
-            </Button>
-            <Button
-              onClick={() => {
-                if (!thisCanvas.current.getSaveData().includes("points")) {
-                  setError("============ Draw something! ==============");
-                  return false;
-                }
-                saveDrawingToDB(
-                  thisCanvas.current.getSaveData(),
-                  letter,
-                  userObj.uid
-                );
-                setShowCanvas();
-              }}
-            >
-              <Tooltip title="Save">
-                <SaveRoundedIcon fontSize="small" />
+                <ClearRoundedIcon color="secondary" fontSize="small" />
               </Tooltip>
             </Button>
           </ButtonGroup>
         </Grid>
       </Grid>
-      <span>{error}</span>
+      <Typography>{error}</Typography>
     </div>
   );
 }

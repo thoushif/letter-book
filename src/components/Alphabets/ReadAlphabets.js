@@ -1,7 +1,6 @@
 import "../../styles.css";
 import { useContext, useEffect, useState } from "react";
-import langData from "../../data/languagedata.json";
-import { ShowAlphabets } from "./ShowAlphabets";
+import { ShowAlphabetsHeader } from "./ShowAlphabetsHeader";
 import { Voice } from "./Voice";
 import styled from "styled-components";
 import MousePaintPreview from "../MousePaintPreview";
@@ -15,47 +14,70 @@ export default function ReadAlphabets({
     params: { lang }
   }
 }) {
-  const [alphabets, setAlphabets] = useState();
-  const [showOnlyDrawn, setShowOnlyDrawn] = useState(false);
-  const [alphabetsFiltered, setAlphabetsFiltered] = useState("");
-  const userObj = useContext(UserContext);
+  const [showOnlyDrawn, setShowOnlyDrawn] = useState("");
+  // const userObj = useContext(UserContext);
+  // const lettersWrittenObj = db.collection("letters-written");
 
-  const canvasDBObj = db.collection("letters-written");
+  const langInitState = { name: "", displayName: "" };
+  const [langDB, setLangDB] = useState(langInitState);
+  const readLangFromDB = () => {
+    let result = alphabetsObj.get();
+    result.then((querySnapshot) => {
+      querySnapshot.forEach(function (doc) {
+        let langDBObj = {
+          name: doc.data().name,
+          displayName: doc.data().displayName,
+          types: doc.data().types
+        };
+        setLangDB(langDBObj);
+      });
+    });
+  };
+
+  const alphabetInitState = { alphabets: [] };
+  const [alphabetsDB, setAlphabetsDB] = useState(alphabetInitState);
+  const alphabetsObj = db.collection("languages").where("name", "==", lang);
+  const alphabetsLangObj = db.collection("languages");
+  const readAlphabetFromDB = (type) => {
+    let result = alphabetsObj.get();
+    result.then((querySnapshot) => {
+      querySnapshot.forEach(function (doc) {
+        const letters = type
+          ? alphabetsLangObj
+              .doc(doc.id)
+              .collection("letters")
+              .where("type", "==", type)
+              .get()
+          : alphabetsLangObj.doc(doc.id).collection("letters").get();
+        letters.then((letters) => {
+          letters.forEach(function (letter) {
+            let letterObjJson = {
+              usage: letter.data().usage,
+              type: letter.data().type,
+              alphabet: letter.data().alphabet,
+              pronunciationAudioSrc: letter.data().pronunciationAudioSrc
+            };
+            setAlphabetsDB((alphabetsDB) => ({
+              alphabets: [...alphabetsDB.alphabets, letterObjJson]
+            }));
+          });
+        });
+      });
+    });
+  };
+
   // .where("userId", "==", userObj.uid);
   useEffect(() => {
     if (showOnlyDrawn) {
-      console.log("showOnlyDrawn, true");
-      canvasDBObj.get().then((querySnapshot) => {
-        querySnapshot.forEach(function (doc) {
-          // doc.data() is never undefined for query doc snapshots
-          console.log("letterssssss", alphabetsFiltered);
-
-          if (
-            doc.data().userId === userObj.uid &&
-            doc.data().language === lang
-          ) {
-            setAlphabetsFiltered((alphabetsFiltered) => {
-              return alphabetsFiltered + "," + doc.data().letter;
-            });
-          }
-        });
-      });
-      console.log("serttingb letterssssss", alphabetsFiltered);
-      setAlphabets(alphabetsFiltered.substring(1));
+      readAlphabetFromDB(showOnlyDrawn);
     } else {
-      console.log("showOnlyDrawn, false");
-      let langDataFiltered = langData.find(
-        (langEach) => langEach.language.toLowerCase() === lang.toLowerCase()
-      );
-      langDataFiltered
-        ? setAlphabets(langDataFiltered.alphabets)
-        : setAlphabets();
+      readAlphabetFromDB();
+      readLangFromDB();
     }
     return cleanUp;
   }, [lang, showOnlyDrawn]);
   const cleanUp = () => {
-    setAlphabets();
-    setAlphabetsFiltered("");
+    setAlphabetsDB(alphabetInitState);
   };
   return (
     <div>
@@ -64,59 +86,72 @@ export default function ReadAlphabets({
         {/* <p>Alphabets Filtered : {alphabetsFiltered.substring(1)}</p> */}
       </Typography>
       <Typography>
-        Alphabets :{" "}
-        {showOnlyDrawn ? "Showing only drawn by you" : "Showing all"}
+        Alphabets : {showOnlyDrawn ? "Showing vowels" : "Showing all"}
       </Typography>
-      <ShowAlphabets
-        alphabets={showOnlyDrawn ? alphabetsFiltered.substring(1) : alphabets}
-        lang={lang}
-      />
-      <Button
-        className="show-only-drawn"
-        size="small"
-        onClick={() => {
-          setShowOnlyDrawn(!showOnlyDrawn);
-        }}
-      >
-        {showOnlyDrawn ? "Show all " : "Show only drawn by me"}
-      </Button>
+      {alphabetsDB.alphabets && (
+        <ShowAlphabetsHeader alphabets={alphabetsDB.alphabets} lang={lang} />
+      )}
+      <FilterContainer>
+        {langDB.types &&
+          langDB.types.map((type) => (
+            <Button
+              className="show-only-drawn"
+              size="small"
+              onClick={() => {
+                setShowOnlyDrawn(type);
+              }}
+            >
+              {type}S
+            </Button>
+          ))}
+
+        <Button
+          className="show-only-drawn"
+          size="small"
+          onClick={() => {
+            setShowOnlyDrawn("");
+          }}
+        >
+          ALL
+        </Button>
+      </FilterContainer>
       {/* todo: this will be the social feed  NOT for all alphabets*/}
       <MousePaintPreviewContainer>
-        {(showOnlyDrawn ? alphabetsFiltered.substring(1) : alphabets) &&
-          (showOnlyDrawn ? alphabetsFiltered.substring(1) : alphabets)
-            .split(",")
-            .map((a) => (
-              <MousePaintPreviewItem key={lang + a}>
-                <Grid
-                  container
-                  spacing={0}
-                  justify="space-evenly"
-                  alignItems="center"
-                >
-                  <Grid
-                    alignItems="center"
-                    key={lang + a + "letter"}
-                    item
-                    xs="5"
-                  >
-                    <div>
-                      <span className="letter-head">{a}</span>
-                      <Typography>Type: </Typography>
-                      <Typography>Language: {lang}</Typography>
-                      <Typography>
-                        Sound: <Voice letter={a} lang={lang} />
-                      </Typography>
-                      <Typography>
-                        Usage: <Usage letter={a} lang={lang} />
-                      </Typography>
-                    </div>
-                  </Grid>
-                  <Grid key={lang + a + "canvas"} item xs="5">
-                    <MousePaintPreview lang={lang} letter={a} />
-                  </Grid>
-                </Grid>
-              </MousePaintPreviewItem>
-            ))}
+        {alphabetsDB.alphabets.map((alphabetObj) => (
+          <MousePaintPreviewItem key={lang + alphabetObj.alphabet}>
+            <Grid
+              container
+              spacing={0}
+              justify="space-evenly"
+              // alignItems="center"
+            >
+              <Grid
+                alignItems="center"
+                key={lang + alphabetObj.alphabet + "letter"}
+                item
+                xs={5}
+              >
+                <div>
+                  <span className="letter-head">{alphabetObj.alphabet}</span>
+                  <Typography>Type: {alphabetObj.type} </Typography>
+                  <Typography>Language: {langDB.displayName}</Typography>
+                  <Typography>
+                    Sound:{" "}
+                    <Voice
+                      pronunciationAudioSrc={alphabetObj.pronunciationAudioSrc}
+                    />
+                  </Typography>
+                  <Typography>
+                    Usage: <Usage content={alphabetObj.usage} />
+                  </Typography>
+                </div>
+              </Grid>
+              <Grid key={lang + alphabetObj.alphabet + "canvas"} item xs={5}>
+                <MousePaintPreview lang={lang} letter={alphabetObj.alphabet} />
+              </Grid>
+            </Grid>
+          </MousePaintPreviewItem>
+        ))}
       </MousePaintPreviewContainer>
     </div>
   );
@@ -125,10 +160,11 @@ export default function ReadAlphabets({
 const MousePaintPreviewContainer = styled.div`
   /* display: flex; */
   align-content: center;
+  margin: 20px auto;
 `;
 
 const FilterContainer = styled.div`
-  /* display: flex; */
+  margin-bottom: 20px;
   float: right;
 `;
 const MousePaintPreviewItem = styled.div`

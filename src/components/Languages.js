@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { db } from "./firebase";
 import styled from "styled-components";
 import { Container, Grid, Typography } from "@material-ui/core";
-
+import ListIcon from "@material-ui/icons/List";
 export default function Languages(props) {
   const languageprop = props.languageprop;
   const [langDB, setLangDB] = useState([]);
@@ -11,7 +11,7 @@ export default function Languages(props) {
     db.collection("languages").onSnapshot((snapshot) => {
       let lng = [];
       lng = snapshot.docs.map((doc) => doc.data()).map((e) => e.name);
-      console.log(lng);
+      // console.log(lng);
       setLangDB(lng);
     });
   }, []);
@@ -19,7 +19,7 @@ export default function Languages(props) {
   return (
     <Container>
       {!languageprop ? (
-        langDB.map((lang) => (
+        langDB.map((lang, i) => (
           <Fragment key={lang}>
             <Grid
               container
@@ -30,7 +30,9 @@ export default function Languages(props) {
             >
               <Grid item>
                 <Link className="language" to={`/draw/${lang}`}>
-                  <Typography>{lang.toUpperCase()}</Typography>
+                  <Typography>
+                    <ListIcon fontSize="small" /> {lang.toUpperCase()}
+                  </Typography>
                 </Link>
               </Grid>
             </Grid>
@@ -39,7 +41,7 @@ export default function Languages(props) {
       ) : (
         <LanguageItem key={languageprop}>
           <Link className="language" to={`/draw/${languageprop}`}>
-            {languageprop.toUpperCase()} {props.children}
+            <Typography variant="h5">{props.children}</Typography>
           </Link>
         </LanguageItem>
       )}
@@ -48,4 +50,3 @@ export default function Languages(props) {
 }
 
 const LanguageItem = styled.div``;
-const LanguageItemContainer = styled.div``;

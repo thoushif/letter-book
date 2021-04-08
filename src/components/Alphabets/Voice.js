@@ -1,12 +1,11 @@
-import { Button, IconButton, Snackbar } from "@material-ui/core";
+import { IconButton, Snackbar } from "@material-ui/core";
 import RecordVoiceOverIcon from "@material-ui/icons/RecordVoiceOver";
 import { Fragment, useState } from "react";
 import CloseIcon from "@material-ui/icons/Close";
+import ReactAudioPlayer from "react-audio-player";
 
-export const Voice = ({ letter }) => {
+export const Voice = ({ pronunciationAudioSrc }) => {
   const [open, setOpen] = useState(false);
-  const message = "WIP: playing how to read " + letter;
-
   const handleClick = () => {
     setOpen(true);
   };
@@ -25,15 +24,15 @@ export const Voice = ({ letter }) => {
         fontSize="small"
         onClick={handleClick}
       />
+
       <Snackbar
         anchorOrigin={{
           vertical: "bottom",
           horizontal: "left"
         }}
         open={open}
-        autoHideDuration={3000}
+        autoHideDuration={2000}
         onClose={handleClose}
-        message={message}
         action={
           <Fragment>
             <IconButton
@@ -46,7 +45,9 @@ export const Voice = ({ letter }) => {
             </IconButton>
           </Fragment>
         }
-      />
+      >
+        <ReactAudioPlayer src={pronunciationAudioSrc} autoPlay controls />
+      </Snackbar>
     </Fragment>
   );
 };
