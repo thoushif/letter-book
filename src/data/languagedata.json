@@ -14,5 +14,13 @@
     "isActive": true,
     "seperator": ",",
     "alphabets": "అ,ఆ,ఇ,ఈ,ఉ,ఊ,ఋ,ౠ,ఌ,ౡ,ఎ,ఏ,ఐ,ఒ,ఓ,ఔ,అఁ,అం,అః"
+  },
+  {
+    "_id": "605cfa1756e0c537a06237c4",
+    "index": 1,
+    "language": "hindi",
+    "isActive": true,
+    "seperator": ",",
+    "alphabets": "అ,ఆ,ఇ,ఈ,ఉ,ఊ,ఋ,ౠ,ఌ,ౡ,ఎ,ఏ,ఐ,ఒ,ఓ,ఔ,అఁ,అం,అః"
   }
 ]

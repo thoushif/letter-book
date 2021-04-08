@@ -1,12 +1,20 @@
 import { signInWithGoogle } from "../firebase";
 import styled from "styled-components";
 import { Button } from "@material-ui/core";
+import { HeaderLogo } from "../Header/HeaderLogo";
+import { SiteDetails } from "../Home";
+import { Typography } from "@material-ui/core";
 
 const Signin = () => {
   return (
     <Container>
+      <HeaderLogo />
+      <SiteDetails />
       <SignIn>
-        Come on in! Join and show how good you can write!!
+        <Typography>
+          Come on in! Join and show how good you can write!!
+        </Typography>
+
         <Button
           color="primary"
           variant="contained"
@@ -23,16 +31,14 @@ const Signin = () => {
 export default Signin;
 
 const Container = styled.div`
-  background: transparent;
-  border-radius: 3px;
-  border: 2px solid lightblue;
-  box-shadow: 4px 2px 20px 5px lightblue;
-  margin: 50px;
-  display: flex;
-  justify-content: center;
-  color: green;
+  /* trbl */
+  margin: 0 250px 10px 250px;
+  @media (max-width: 1000px) {
+    flex-direction: column;
+    margin: 0 50px 10px 50px;
+  }
+  /* display: inline-flex; */
 `;
-
 const SignIn = styled.div`
   color: green;
   margin: 50px;
