@@ -67,7 +67,10 @@ export default function MousePaint(props) {
       if (doc.exists) {
         canvasDBObj.update({
           canvasData: canvasData,
-          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+          isActive: true,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+          deletedAt: "",
+          isPublished: false
         });
       } else {
         db.collection("letters-written")
@@ -83,11 +86,13 @@ export default function MousePaint(props) {
           .doc(userObj.uid)
           .set({
             letter: letter,
+            isPublished: false,
             canvasData: canvasData,
             userId: userObj.uid,
             userName: userObj.displayName,
             voteCount: 0,
-            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            isActive: true
           });
       }
     });

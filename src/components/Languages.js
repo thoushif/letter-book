@@ -10,7 +10,7 @@ export default function Languages(props) {
   useEffect(() => {
     db.collection("languages").onSnapshot((snapshot) => {
       let lng = [];
-      lng = snapshot.docs.map((doc) => doc.data()).map((e) => e.name);
+      lng = snapshot.docs.map((doc) => doc.data()).map((e) => e);
       // console.log(lng);
       setLangDB(lng);
     });
@@ -20,7 +20,7 @@ export default function Languages(props) {
     <Container>
       {!languageprop ? (
         langDB.map((lang, i) => (
-          <Fragment key={lang}>
+          <Fragment key={lang.name}>
             <Grid
               container
               direction="row"
@@ -29,9 +29,12 @@ export default function Languages(props) {
               spacing={5}
             >
               <Grid item>
-                <Link className="language" to={`/draw/${lang}`}>
+                <Link className="language" to={`/draw/${lang.name}`}>
                   <Typography>
-                    <ListIcon fontSize="small" /> {lang.toUpperCase()}
+                    <ListIcon fontSize="small" />{" "}
+                    {lang.displayName
+                      ? lang.displayName
+                      : lang.name.toUpperCase()}
                   </Typography>
                 </Link>
               </Grid>

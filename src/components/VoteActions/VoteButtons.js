@@ -28,7 +28,7 @@ export default function VoteButtons({ letter, userId }) {
         setLikeCount(doc.data().likeCount);
         setDislikeCount(doc.data().dislikeCount);
         let votedByObj = doc.data().votedBy ? doc.data().votedBy : undefined;
-        console.log(votedByObj);
+        // console.log(votedByObj);
         resetVoteButtonsUtil(letter, votedByObj);
       });
 
@@ -124,7 +124,7 @@ export default function VoteButtons({ letter, userId }) {
     canvasDBObj.get().then((doc) => {
       if (doc.exists) {
         let votedByObj = doc.data().votedBy ? doc.data().votedBy : undefined;
-        console.log(votedByObj);
+        // console.log(votedByObj);
         resetVoteButtonsUtil(doc.data().letter, votedByObj);
       }
     });
@@ -188,7 +188,7 @@ export default function VoteButtons({ letter, userId }) {
         {likeCount ? likeCount : 0}
         <Tooltip title="like">
           <ThumbUpAltTwoToneIcon
-            // style={{ cursor: upvoteDisabled ? "not-allowed" : "pointer" }}
+            color={likeDone ? "primary" : ""}
             fontSize="small"
             // color={!likeDone ? "primary" : "secondary"}
           />
@@ -198,7 +198,10 @@ export default function VoteButtons({ letter, userId }) {
       <Button disabled={downvoteDisabled} onClick={() => vote(false)}>
         {dislikeCount ? dislikeCount : 0}
         <Tooltip title="Dislike">
-          <ThumbDownAltTwoToneIcon fontSize="small" />
+          <ThumbDownAltTwoToneIcon
+            fontSize="small"
+            color={dislikeDone ? "primary" : ""}
+          />
         </Tooltip>
       </Button>
       <Typography variant="caption"></Typography>

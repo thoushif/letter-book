@@ -3,7 +3,7 @@ import RecordVoiceOverIcon from "@material-ui/icons/RecordVoiceOver";
 import { Fragment, useState } from "react";
 import CloseIcon from "@material-ui/icons/Close";
 import ReactAudioPlayer from "react-audio-player";
-
+import { Button, Grid, Typography } from "@material-ui/core";
 export const Voice = ({ pronunciationAudioSrc }) => {
   const [open, setOpen] = useState(false);
   const handleClick = () => {
@@ -46,7 +46,11 @@ export const Voice = ({ pronunciationAudioSrc }) => {
           </Fragment>
         }
       >
-        <ReactAudioPlayer src={pronunciationAudioSrc} autoPlay controls />
+        {pronunciationAudioSrc ? (
+          <ReactAudioPlayer src={pronunciationAudioSrc} autoPlay controls />
+        ) : (
+          <Typography>SOUND NOT AVAILALBLE</Typography>
+        )}
       </Snackbar>
     </Fragment>
   );

@@ -5,7 +5,7 @@ import { Voice } from "./Voice";
 import styled from "styled-components";
 import MousePaintPreview from "../MousePaintPreview";
 import { db } from "../firebase";
-import { UserContext } from "../providers/UserProvider";
+import { useHistory } from "react-router-dom";
 import { Button, Grid, Typography } from "@material-ui/core";
 import { Usage } from "./Usage";
 
@@ -33,7 +33,11 @@ export default function ReadAlphabets({
       });
     });
   };
-
+  const history = useHistory();
+  const routeChange = (lang, alphabet) => {
+    let path = `/draw/${lang}/${alphabet}`;
+    history.push(path);
+  };
   const alphabetInitState = { alphabets: [] };
   const [alphabetsDB, setAlphabetsDB] = useState(alphabetInitState);
   const alphabetsObj = db.collection("languages").where("name", "==", lang);
@@ -82,11 +86,12 @@ export default function ReadAlphabets({
   return (
     <div>
       <Typography>
-        Language : {lang.toUpperCase()}
+        Language : {langDB.displayName}
         {/* <p>Alphabets Filtered : {alphabetsFiltered.substring(1)}</p> */}
       </Typography>
       <Typography>
-        Alphabets : {showOnlyDrawn ? "Showing vowels" : "Showing all"}
+        Alphabets :{" "}
+        {showOnlyDrawn ? "Showing " + showOnlyDrawn + "s" : "Showing all"}
       </Typography>
       {alphabetsDB.alphabets && (
         <ShowAlphabetsHeader alphabets={alphabetsDB.alphabets} lang={lang} />
@@ -95,6 +100,7 @@ export default function ReadAlphabets({
         {langDB.types &&
           langDB.types.map((type) => (
             <Button
+              key={type}
               className="show-only-drawn"
               size="small"
               onClick={() => {
@@ -117,41 +123,52 @@ export default function ReadAlphabets({
       </FilterContainer>
       {/* todo: this will be the social feed  NOT for all alphabets*/}
       <MousePaintPreviewContainer>
-        {alphabetsDB.alphabets.map((alphabetObj) => (
-          <MousePaintPreviewItem key={lang + alphabetObj.alphabet}>
-            <Grid
-              container
-              spacing={0}
-              justify="space-evenly"
-              // alignItems="center"
-            >
+        {alphabetsDB.alphabets &&
+          alphabetsDB.alphabets.map((alphabetObj) => (
+            <MousePaintPreviewItem key={lang + alphabetObj.alphabet}>
               <Grid
-                alignItems="center"
-                key={lang + alphabetObj.alphabet + "letter"}
-                item
-                xs={5}
+                container
+                spacing={0}
+                justify="space-evenly"
+                // alignItems="center"
               >
-                <div>
-                  <span className="letter-head">{alphabetObj.alphabet}</span>
-                  <Typography>Type: {alphabetObj.type} </Typography>
-                  <Typography>Language: {langDB.displayName}</Typography>
-                  <Typography>
-                    Sound:{" "}
-                    <Voice
-                      pronunciationAudioSrc={alphabetObj.pronunciationAudioSrc}
-                    />
-                  </Typography>
-                  <Typography>
-                    Usage: <Usage content={alphabetObj.usage} />
-                  </Typography>
-                </div>
+                <Grid
+                  alignItems="center"
+                  key={lang + alphabetObj.alphabet + "letter"}
+                  item
+                  xs={5}
+                >
+                  <div>
+                    <span
+                      className="letter-head"
+                      // onClick={() => routeChange(lang, alphabetsObj.type)}
+                    >
+                      {alphabetObj.alphabet}
+                    </span>
+                    <Typography>Type: {alphabetObj.type} </Typography>
+                    <Typography>Language: {langDB.displayName}</Typography>
+                    <Typography>
+                      Sound:
+                      <Voice
+                        pronunciationAudioSrc={
+                          alphabetObj.pronunciationAudioSrc
+                        }
+                      />
+                    </Typography>
+                    <Typography>
+                      Usage: <Usage content={alphabetObj.usage} />
+                    </Typography>
+                  </div>
+                </Grid>
+                <Grid key={lang + alphabetObj.alphabet + "canvas"} item xs={5}>
+                  <MousePaintPreview
+                    lang={lang}
+                    letter={alphabetObj.alphabet}
+                  />
+                </Grid>
               </Grid>
-              <Grid key={lang + alphabetObj.alphabet + "canvas"} item xs={5}>
-                <MousePaintPreview lang={lang} letter={alphabetObj.alphabet} />
-              </Grid>
-            </Grid>
-          </MousePaintPreviewItem>
-        ))}
+            </MousePaintPreviewItem>
+          ))}
       </MousePaintPreviewContainer>
     </div>
   );
