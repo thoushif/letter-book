@@ -55,6 +55,7 @@ export default function MousePaintPreview({ lang, letter, showOthers }) {
     setPaintCanvas(paintCanvasInitialState);
     setCanvasPreviewState("");
     setOtherPaintsCount(0);
+    setOpenOthersPreviewOperation("");
   };
   const handleClickOpenPreview = (eachPaint, letter) => {
     setOpenPreview(true);
@@ -128,12 +129,15 @@ export default function MousePaintPreview({ lang, letter, showOthers }) {
         .doc(userObj.uid);
       canvasDBObj.get().then((doc) => {
         if (doc.exists) {
-          setOpenOthersPreviewOperation("delete");
           canvasDBObj.update({
             canvasData: "",
+            likeCount: 0,
+            dislikeCount: 0,
             isActive: false,
-            deletedAt: firebase.firestore.FieldValue.serverTimestamp()
+            deletedAt: firebase.firestore.FieldValue.serverTimestamp(),
+            votedBy: []
           });
+          setOpenOthersPreviewOperation("delete");
         }
       });
     }

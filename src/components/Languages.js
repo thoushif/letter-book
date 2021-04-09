@@ -30,7 +30,7 @@ export default function Languages(props) {
             >
               <Grid item>
                 <Link className="language" to={`/draw/${lang.name}`}>
-                  <Typography>
+                  <Typography variant="h4">
                     <ListIcon fontSize="small" />{" "}
                     {lang.displayName
                       ? lang.displayName

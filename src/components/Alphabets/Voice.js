@@ -49,7 +49,7 @@ export const Voice = ({ pronunciationAudioSrc }) => {
         {pronunciationAudioSrc ? (
           <ReactAudioPlayer src={pronunciationAudioSrc} autoPlay controls />
         ) : (
-          <Typography>SOUND NOT AVAILALBLE</Typography>
+          <Typography>SOUND NOT YET AVAILALBLE</Typography>
         )}
       </Snackbar>
     </Fragment>

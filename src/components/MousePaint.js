@@ -92,7 +92,9 @@ export default function MousePaint(props) {
             userName: userObj.displayName,
             voteCount: 0,
             createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-            isActive: true
+            isActive: true,
+            likeCount: 0,
+            dislikeCount: 0
           });
       }
     });
