@@ -18,7 +18,7 @@ export default function LetterPreview({
   const [alphabetsDB, setAlphabetsDB] = useState({});
 
   const readAlphabetFromDB = (lettersFiltered) => {
-    console.log("===========>", lettersFiltered);
+    // console.log("===========>", lettersFiltered);
     let result = alphabetsObj.get();
     result.then((querySnapshot) => {
       querySnapshot.forEach(function (doc) {
@@ -31,7 +31,7 @@ export default function LetterPreview({
           : alphabetsLangObj.doc(doc.id).collection("letters").get();
         letters.then((letters) => {
           letters.forEach(function (letter) {
-            console.log(letter.data());
+            // console.log(letter.data());
             let letterObjJson = {
               usage: letter.data().usage,
               type: letter.data().type,
@@ -67,7 +67,7 @@ export default function LetterPreview({
   return (
     <MousePaintPreviewContainer>
       <Languages languageprop={lang}>
-        Showing '{letter}' in {lang.toUpperCase()}.
+        Showing '{letter}' in {langDB.displayName}.
         <Button>Show All letters</Button>
       </Languages>
       {/* <MousePaintPreviewItem>
@@ -120,8 +120,12 @@ export default function LetterPreview({
               </Typography>
             </div>
           </Grid>
-          <Grid key={lang + alphabetsDB.alphabet + "canvas"} item xs="5">
-            <MousePaintPreview lang={lang} letter={alphabetsDB.alphabet} />
+          <Grid key={lang + alphabetsDB.alphabet + "canvas"} item xs={5}>
+            <MousePaintPreview
+              lang={lang}
+              letter={alphabetsDB.alphabet}
+              showOthers
+            />
           </Grid>
         </Grid>
       </MousePaintPreviewItem>

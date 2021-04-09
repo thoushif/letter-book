@@ -60,18 +60,19 @@ const Draw = () => (
 );
 
 export const SiteDetails = () => (
-  <Typography>
-    <p>
+  <Fragment>
+    <Typography variant="body1" gutterBottom></Typography>
+    <Typography variant="body1" gutterBottom>
       The Place where you can show how do you draw the letters of your language
-    </p>
-    <p>
+    </Typography>
+    <Typography variant="body1" gutterBottom>
       If you start learning new language, put in the drawing and seek the
       quality of your letter
-    </p>
-    <p>
+    </Typography>
+    <Typography variant="body1" gutterBottom>
       <Languages />
-    </p>
-  </Typography>
+    </Typography>
+  </Fragment>
 );
 
 const Button = styled.button`

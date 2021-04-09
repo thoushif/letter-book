@@ -3,13 +3,14 @@ import { ButtonGroup, Button, Tooltip, Typography } from "@material-ui/core";
 import { Fragment, useEffect, useState } from "react";
 import CanvasDraw from "react-canvas-draw";
 import VoteButtons from "../VoteActions/VoteButtons";
+import date from "date-and-time";
 
-export default function OthersLetterPreview({ canvasPreviewState }) {
-  const [previewTime, setpreviewTime] = useState(5);
+export default function OthersLetterPreview({ canvasPreviewState, self }) {
+  const [previewTime, setpreviewTime] = useState(30);
 
   return (
     <Fragment>
-      {/* {canvasPreviewState} */}
+      {/* {self === "yes" ? "showing mine" : "showing others"} */}
       <ButtonGroup
         variant="contained"
         color="primary"
@@ -32,26 +33,49 @@ export default function OthersLetterPreview({ canvasPreviewState }) {
           </Tooltip>
         </Button>
       </ButtonGroup>
-      <OthersCanvasDraw
-        canvasPreviewState={canvasPreviewState}
-        previewTime={previewTime}
-      />
-      <Typography>
-        <small>by {canvasPreviewState.eachPaint.userName}</small>{" "}
-      </Typography>
-      <VoteButtons
-        key={
-          canvasPreviewState.eachPaint.userId +
-          "other" +
-          canvasPreviewState.eachPaint.letter
-        }
-        letter={canvasPreviewState.eachPaint.letter}
-        userId={canvasPreviewState.eachPaint.userId}
-      />
+      {self === "no" ? (
+        <Fragment>
+          <OthersCanvasDraw
+            canvasPreviewState={canvasPreviewState}
+            canvasData={canvasPreviewState.eachPaint.canvasData}
+            previewTime={previewTime}
+          />
+          <Typography variant="subtitle2">
+            by {canvasPreviewState.eachPaint.userName}
+          </Typography>
+          <Typography variant="subtitle2">
+            Posted at{" "}
+            {date.format(
+              new Date(canvasPreviewState.eachPaint.publishedAt.seconds * 1000),
+              "ddd, MMM DD YYYY HH:mm"
+            )}
+          </Typography>
+          <VoteButtons
+            key={
+              canvasPreviewState.eachPaint.userId +
+              "other" +
+              canvasPreviewState.eachPaint.letter
+            }
+            letter={canvasPreviewState.eachPaint.letter}
+            userId={canvasPreviewState.eachPaint.userId}
+          />
+        </Fragment>
+      ) : (
+        canvasPreviewState && (
+          <Fragment>
+            {/* <span>hello + {canvasPreviewState.saveData}</span> */}
+            <OthersCanvasDraw
+              canvasPreviewState={canvasPreviewState}
+              canvasData={canvasPreviewState.saveData}
+              previewTime={previewTime}
+            />
+          </Fragment>
+        )
+      )}
     </Fragment>
   );
 }
-function OthersCanvasDraw({ canvasPreviewState, previewTime }) {
+function OthersCanvasDraw({ canvasPreviewState, canvasData, previewTime }) {
   useEffect(() => {}, [previewTime]);
   return (
     <Fragment>
@@ -62,7 +86,7 @@ function OthersCanvasDraw({ canvasPreviewState, previewTime }) {
         canvasHeight={canvasPreviewState.height + 100}
         brushRadius={canvasPreviewState.brushRadius}
         lazyRadius={canvasPreviewState.lazyRadius}
-        saveData={canvasPreviewState.eachPaint.canvasData}
+        saveData={canvasData}
         loadTimeOffset={previewTime}
       />
     </Fragment>

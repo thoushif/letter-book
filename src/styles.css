@@ -46,3 +46,12 @@ body {
 .letter-head {
   font-size: 5rem;
 }
+.flasher {
+  animation: flasher 1s linear infinite;
+}
+
+@keyframes flasher {
+  50% {
+    opacity: 0;
+  }
+}

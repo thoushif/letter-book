@@ -17,7 +17,7 @@ export const ShowAlphabetsHeader = ({ alphabets, lang }) => {
             key={alphabetsObj.alphabet}
             color="primary"
             label={alphabetsObj.alphabet.toUpperCase()}
-            // size="small"
+            size="medium"
             // deleteIcon={<ClearIcon />}
             onClick={() => routeChange(lang, alphabetsObj.alphabet)}
             // onDelete={() => deletethisAlphabet(lang, alphabet)}
