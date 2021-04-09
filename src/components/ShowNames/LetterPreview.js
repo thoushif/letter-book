@@ -35,7 +35,8 @@ export default function LetterPreview({
             let letterObjJson = {
               usage: letter.data().usage,
               type: letter.data().type,
-              alphabet: letter.data().alphabet
+              alphabet: letter.data().alphabet,
+              pronunciationAudioSrc: letter.data().pronunciationAudioSrc
             };
             setAlphabetsDB(letterObjJson);
           });
@@ -113,7 +114,11 @@ export default function LetterPreview({
               <Typography>Type: {alphabetsDB.type} </Typography>
               <Typography>Language: {langDB.displayName}</Typography>
               <Typography>
-                Sound: <Voice letter={alphabetsDB.alphabet} lang={lang} />
+                Sound:{" "}
+                <Voice
+                  pronunciationAudioSrc={alphabetsDB.pronunciationAudioSrc}
+                  lang={lang}
+                />
               </Typography>
               <Typography>
                 Usage: <Usage content={alphabetsDB.usage} />

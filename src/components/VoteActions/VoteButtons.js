@@ -53,7 +53,7 @@ export default function VoteButtons({ letter, userId }) {
           prev.votedAt > current.votedAt
           ? prev
           : current;
-      });
+      }, votedByObj);
 
     if (
       votedByObj &&
