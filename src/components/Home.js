@@ -54,7 +54,7 @@ const Header = () => (
 // Draw Page
 const Draw = () => <Fragment> {<Languages />}</Fragment>;
 
-export const SiteDetails = () => (
+export const SiteDetails = ({ signinPage }) => (
   <Fragment>
     <Typography variant="body1" gutterBottom></Typography>
     <Typography variant="body1" gutterBottom>
@@ -65,7 +65,7 @@ export const SiteDetails = () => (
       quality of your letter
     </Typography>
     <Typography variant="body1" gutterBottom>
-      {<Languages />}
+      {!signinPage && <Languages />}
     </Typography>
   </Fragment>
 );
