@@ -52,12 +52,7 @@ const Header = () => (
   </Fragment>
 );
 // Draw Page
-const Draw = () => (
-  <Fragment>
-    {" "}
-    <Languages />
-  </Fragment>
-);
+const Draw = () => <Fragment> {<Languages />}</Fragment>;
 
 export const SiteDetails = () => (
   <Fragment>
@@ -70,7 +65,7 @@ export const SiteDetails = () => (
       quality of your letter
     </Typography>
     <Typography variant="body1" gutterBottom>
-      <Languages />
+      {<Languages />}
     </Typography>
   </Fragment>
 );
