@@ -9,7 +9,7 @@ const Signin = () => {
   return (
     <Container>
       <HeaderLogo />
-      <SiteDetails />
+      <SiteDetails signinPage />
       <SignIn>
         <Typography>
           Come on in! Join and show how good you can write!!
