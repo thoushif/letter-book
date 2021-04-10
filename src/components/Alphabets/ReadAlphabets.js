@@ -33,11 +33,11 @@ export default function ReadAlphabets({
       });
     });
   };
-  const history = useHistory();
-  const routeChange = (lang, alphabet) => {
-    let path = `/draw/${lang}/${alphabet}`;
-    history.push(path);
-  };
+  // const history = useHistory();
+  // const routeChange = (lang, alphabet) => {
+  //   let path = `/draw/${lang}/${alphabet}`;
+  //   history.push(path);
+  // };
   const alphabetInitState = { alphabets: [] };
   const [alphabetsDB, setAlphabetsDB] = useState(alphabetInitState);
   const alphabetsObj = db.collection("languages").where("name", "==", lang);
@@ -50,9 +50,14 @@ export default function ReadAlphabets({
           ? alphabetsLangObj
               .doc(doc.id)
               .collection("letters")
+              .orderBy("index", "asc")
               .where("type", "==", type)
               .get()
-          : alphabetsLangObj.doc(doc.id).collection("letters").get();
+          : alphabetsLangObj
+              .doc(doc.id)
+              .collection("letters")
+              .orderBy("index", "asc")
+              .get();
         letters.then((letters) => {
           letters.forEach(function (letter) {
             let letterObjJson = {

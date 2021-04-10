@@ -73,13 +73,13 @@ export default function MousePaint(props) {
           isPublished: false
         });
       } else {
-        db.collection("letters-written")
-          .doc(lang + letter + userObj.uid)
-          .set({
-            letter: letter,
-            userId: userObj.uid,
-            language: lang
-          });
+        // db.collection("letters-written")
+        //   .doc(lang + letter + userObj.uid)
+        //   .set({
+        //     letter: letter,
+        //     userId: userObj.uid,
+        //     language: lang
+        //   });
         db.collection("canvasObjects")
           .doc(letter)
           .collection("users")
