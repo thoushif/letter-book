@@ -1,7 +1,7 @@
 import MousePaintPreview from "../MousePaintPreview";
 import styled from "styled-components";
 import Languages from "../Languages";
-import { Button, Grid, Tooltip, Typography } from "@material-ui/core";
+import { Button, Chip, Grid, Tooltip, Typography } from "@material-ui/core";
 import { Voice } from "../Alphabets/Voice";
 import { Usage } from "../Alphabets/Usage";
 import { db } from "../firebase";
@@ -10,6 +10,10 @@ import StarOutlineOutlinedIcon from "@material-ui/icons/StarOutlineOutlined";
 import { UserContext } from "../providers/UserProvider";
 import firebase from "firebase/app";
 import StarOutlinedIcon from "@material-ui/icons/StarOutlined";
+import { useHistory } from "react-router-dom";
+import KeyboardArrowLeftRoundedIcon from "@material-ui/icons/KeyboardArrowLeftRounded";
+import KeyboardArrowRightRoundedIcon from "@material-ui/icons/KeyboardArrowRightRounded";
+// import background from "../src/data/blank-open-book.jpg";
 
 export default function LetterPreview({
   match: {
@@ -25,7 +29,13 @@ export default function LetterPreview({
     favoriteLettersInitState
   );
   const [alphabetsDB, setAlphabetsDB] = useState({});
-
+  const [nextAlphabetsDB, setNextAlphabetsDB] = useState({});
+  const [prevAlphabetsDB, setPrevAlphabetsDB] = useState({});
+  const history = useHistory();
+  const routeChange = (lang, alphabet) => {
+    let path = `/draw/${lang}/${alphabet}`;
+    history.push(path);
+  };
   const readAlphabetFromDB = (lettersFiltered) => {
     // console.log("===========>", lettersFiltered);
     let result = alphabetsObj.get();
@@ -43,11 +53,46 @@ export default function LetterPreview({
             // console.log(letter.data());
             let letterObjJson = {
               usage: letter.data().usage,
+              index: letter.data().index,
               type: letter.data().type,
               alphabet: letter.data().alphabet,
               pronunciationAudioSrc: letter.data().pronunciationAudioSrc
             };
             setAlphabetsDB(letterObjJson);
+
+            console.log("current letter index", letter.data().index);
+
+            const nextLetterIndex = letter.data().index + 1;
+            const nextLetterObj = alphabetsLangObj
+              .doc(doc.id)
+              .collection("letters")
+              .where("index", "==", nextLetterIndex)
+              .get();
+            nextLetterObj.then((nextLetters) => {
+              nextLetters.forEach(function (nextLetter) {
+                console.log(nextLetter.data());
+                let letterObjJson = {
+                  alphabet: nextLetter.data().alphabet
+                };
+                setNextAlphabetsDB(letterObjJson);
+              });
+            });
+            //prev letter obj
+            const prevLetterIndex = letter.data().index - 1;
+            const prevLetterObj = alphabetsLangObj
+              .doc(doc.id)
+              .collection("letters")
+              .where("index", "==", prevLetterIndex)
+              .get();
+            prevLetterObj.then((prevLetters) => {
+              prevLetters.forEach(function (prevLetter) {
+                console.log(prevLetter.data());
+                let letterObjJson = {
+                  alphabet: prevLetter.data().alphabet
+                };
+                setPrevAlphabetsDB(letterObjJson);
+              });
+            });
           });
         });
       });
@@ -120,6 +165,7 @@ export default function LetterPreview({
         {
           letter: letter,
           createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+          lang: lang,
           isActive: true
         },
         { merge: true }
@@ -131,7 +177,14 @@ export default function LetterPreview({
     if (userObj) readFavoriteLettersFromDB(userObj.uid);
     readAlphabetFromDB(letter);
     readLangFromDB();
+    return cleanup;
   }, [letter, forceRefresh]);
+
+  const cleanup = () => {
+    setNextAlphabetsDB({});
+    setPrevAlphabetsDB({});
+  };
+
   // return <MousePaintPreview lang={lang} letter={letter} />;
   return (
     <MousePaintPreviewContainer>
@@ -171,14 +224,35 @@ export default function LetterPreview({
                         </MousePaintPreviewItem>  }
                         </MousePaintPreviewItem> */}
       <MousePaintPreviewItem key={lang + alphabetsDB.alphabet}>
-        <Grid container spacing={0} justify="space-evenly" alignItems="center">
+        <Grid
+          container
+          spacing={0}
+          justify="center"
+          alignItems="stretch"
+          direction="row"
+          styles={{ backgroundImage: `url(${"../data/blank-open-book.jpg"})` }}
+        >
           <Grid
             alignItems="center"
             key={lang + alphabetsDB.alphabet + "letter"}
             item
             xs="5"
+            className="bookborder-left"
           >
-            <div>
+            {prevAlphabetsDB && prevAlphabetsDB.alphabet && (
+              <Chip
+                key={prevAlphabetsDB.alphabet}
+                color="action"
+                label={prevAlphabetsDB.alphabet.toUpperCase()}
+                avatar={<KeyboardArrowLeftRoundedIcon />}
+                size="medium"
+                // deleteIcon={<ClearIcon />}
+                onClick={() => routeChange(lang, prevAlphabetsDB.alphabet)}
+                // onDelete={() => deletethisAlphabet(lang, alphabet)}
+                // avatar={<Avatar>{alphabet.toUpperCase()}</Avatar>}
+              />
+            )}
+            <div className="leftpage">
               <span className="letter-head">{alphabetsDB.alphabet}</span>
 
               {!favoriteLetters.favoriteLetters.includes(
@@ -218,9 +292,36 @@ export default function LetterPreview({
               <Typography>
                 Usage: <Usage content={alphabetsDB.usage} />
               </Typography>
+              <MousePaintPreview lang={lang} letter={alphabetsDB.alphabet} />
             </div>
           </Grid>
-          <Grid key={lang + alphabetsDB.alphabet + "canvas"} item xs={5}>
+          <Grid
+            key={lang + alphabetsDB.alphabet + "canvas"}
+            item
+            xs={5}
+            className="bookborder-right height-check"
+          >
+            <div
+              className="floatRight"
+              onClick={() => routeChange(lang, nextAlphabetsDB.alphabet)}
+            >
+              {nextAlphabetsDB && nextAlphabetsDB.alphabet && (
+                <Chip
+                  key={nextAlphabetsDB.alphabet}
+                  color="action"
+                  label={nextAlphabetsDB.alphabet.toUpperCase()}
+                  size="medium"
+                  avatar={<KeyboardArrowRightRoundedIcon />}
+                  // deleteIcon={<ClearIcon />}
+                  onClick={() => routeChange(lang, nextAlphabetsDB.alphabet)}
+                  // onDelete={() => deletethisAlphabet(lang, alphabet)}
+                  // avatar={<Avatar>{alphabet.toUpperCase()}</Avatar>}
+                >
+                  {" "}
+                  <KeyboardArrowLeftRoundedIcon />
+                </Chip>
+              )}
+            </div>
             <MousePaintPreview
               lang={lang}
               letter={alphabetsDB.alphabet}
@@ -238,11 +339,11 @@ const MousePaintPreviewContainer = styled.div`
   /* margin: 10px auto; */
 `;
 const MousePaintPreviewItem = styled.div`
-  /* background-color: white;
+  background-color: white;
   border-radius: 5px;
   border: 2px solid #aea7a1;
   font-size: 120%;
-  padding: 20px; */
+  padding: 20px;
   background-color: white;
   border-radius: 5px;
   border-color: black;

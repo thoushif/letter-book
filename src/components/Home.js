@@ -8,9 +8,9 @@ import { UserContext } from "./providers/UserProvider";
 
 import ShowNames from "./ShowNames/ShowNames";
 import LetterPreview from "./ShowNames/LetterPreview";
-import MenuBookIcon from "@material-ui/icons/MenuBook";
-import { Typography } from "@material-ui/core";
+import { Button, Typography } from "@material-ui/core";
 import { HeaderLogo } from "./Header/HeaderLogo";
+import { Favorites } from "./HomeLanugages/Favorites";
 
 export default function Home() {
   const user = useContext(UserContext);
@@ -21,8 +21,10 @@ export default function Home() {
           <HeaderLogo />
           {/* <MenuBookIcon color="action" /> */}
         </Link>
-        <Button className="logout" onClick={logOut}>
-          Logout
+        <LogoutButton onClick={logOut}>Logout</LogoutButton>
+        <Button className="floatRight" component={Link} to={"/favorites"}>
+          Profile
+          {/* <MenuBookIcon color="action" /> */}
         </Button>
         <Typography variant="subtitle1">Hi {user.displayName} !</Typography>
         <MenuItemContainer>
@@ -38,6 +40,7 @@ export default function Home() {
           <Route path="/see-your-name/:lang" component={ShowNames} />
           <Route path="/draw/:lang/:letter" component={LetterPreview} />
           <Route path="/draw/:lang" component={ReadAlphabets} />
+          <Route path="/favorites" component={Favorites} />
           <Route path="/draw" component={Draw} />
           <Route render={() => <h1>404: page not found</h1>} />
         </Switch>
@@ -51,6 +54,8 @@ const Header = () => (
     <SiteDetails />
   </Fragment>
 );
+// Home Page
+
 // Draw Page
 const Draw = () => <Fragment> {<Languages />}</Fragment>;
 
@@ -70,22 +75,36 @@ export const SiteDetails = ({ signinPage }) => (
   </Fragment>
 );
 
-const Button = styled.button`
+const LogoutButton = styled.button`
   background: transparent;
-  border-radius: 3px;
   border: 2px solid palevioletred;
+  border-radius: 3px;
   color: palevioletred;
   margin: 0 1em;
   padding: 0.25em 1em;
-
   float: right;
 `;
+
+const FavoritesButton = styled.button`
+  background: transparent;
+  border: 2px solid palevioletred;
+  border-radius: 3px;
+  color: palevioletred;
+  margin: 0 1em;
+  padding: 0.25em 1em;
+  float: right;
+`;
+
 const Container = styled.div`
   /* trbl */
   margin: 0 250px 10px 250px;
   @media (max-width: 1000px) {
     flex-direction: column;
     margin: 0 50px 10px 50px;
+  }
+  @media (max-width: 400px) {
+    flex-direction: column;
+    margin: 0 0px 10px 0px;
   }
   /* display: inline-flex; */
 `;

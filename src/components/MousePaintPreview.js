@@ -195,7 +195,7 @@ export default function MousePaintPreview({ lang, letter, showOthers }) {
           />
         </Dialog>
       )}
-      {paintCanvas.saveData && showCanvas === "false" ? (
+      {paintCanvas.saveData && showCanvas === "false" && !showOthers ? (
         <Fragment>
           <Typography> Your Drawing!</Typography>
           <div
@@ -289,7 +289,8 @@ export default function MousePaintPreview({ lang, letter, showOthers }) {
           )}
         </Fragment>
       ) : (
-        showCanvas === "false" && (
+        showCanvas === "false" &&
+        !showOthers && (
           <Fragment>
             <Typography>
               You have not drawn {letter} yet! add in yours
@@ -308,28 +309,21 @@ export default function MousePaintPreview({ lang, letter, showOthers }) {
       )}
       {otherPaintsCount > 0 && (
         <OthersPaintsContianer>
-          <div
-            onClick={() => routeChange(lang, letter)}
-            role="img"
-            aria-label="open"
-            style={{ float: "right", cursor: "pointer" }}
-          >
-            <Typography>
-              {otherPaintsCount} drawings{" "}
-              <Tooltip title="Show">
-                <ListAltRoundedIcon
-                  style={{ float: "right", cursor: "pointer" }}
-                  fontSize="small"
-                >
-                  {!showOthers && <span>, see others!</span>}
-                </ListAltRoundedIcon>
-              </Tooltip>
-            </Typography>
-          </div>
+          {showOthers && (
+            <div
+              onClick={() => routeChange(lang, letter)}
+              role="img"
+              aria-label="open"
+              style={{ cursor: "pointer" }}
+            >
+              <Typography>{otherPaintsCount} drawings </Typography>
+            </div>
+          )}
           {showOthers &&
             otherPaints.map((eachPaint) => {
               return (
                 <Fragment
+                  className="height-check"
                   key={letter + lang + eachPaint.userId + paintCanvasOperation}
                 >
                   <hr></hr>
@@ -380,7 +374,9 @@ const OthersPaintsContianer = styled.div`
   background-color: #edf5ef;
   box-shadow: inset 0 0 10px white;
   margin-top: 10px;
+
   .canvas {
-    margin-left: 15px;
+    margin-left: 35px;
+    /* overflow-y: scroll; */
   }
 `;
