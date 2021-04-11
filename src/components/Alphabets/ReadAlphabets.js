@@ -27,7 +27,8 @@ export default function ReadAlphabets({
         let langDBObj = {
           name: doc.data().name,
           displayName: doc.data().displayName,
-          types: doc.data().types
+          types: doc.data().types,
+          pluralSymbol: doc.data().pluralSymbol
         };
         setLangDB(langDBObj);
       });
@@ -96,7 +97,7 @@ export default function ReadAlphabets({
       </Typography>
       <Typography>
         Alphabets :{" "}
-        {showOnlyDrawn ? "Showing " + showOnlyDrawn + "s" : "Showing all"}
+        {showOnlyDrawn ? showOnlyDrawn + langDB.pluralSymbol : "Showing all"}
       </Typography>
       {alphabetsDB.alphabets && (
         <ShowAlphabetsHeader alphabets={alphabetsDB.alphabets} lang={lang} />
@@ -106,18 +107,18 @@ export default function ReadAlphabets({
           langDB.types.map((type) => (
             <Button
               key={type}
-              className="show-only-drawn"
+              className="floatRight"
               size="small"
               onClick={() => {
                 setShowOnlyDrawn(type);
               }}
             >
-              {type}S
+              {type + langDB.pluralSymbol}
             </Button>
           ))}
 
         <Button
-          className="show-only-drawn"
+          className="floatRight"
           size="small"
           onClick={() => {
             setShowOnlyDrawn("");
@@ -134,7 +135,8 @@ export default function ReadAlphabets({
               <Grid
                 container
                 spacing={0}
-                justify="space-evenly"
+                justify="center"
+
                 // alignItems="center"
               >
                 <Grid
@@ -142,8 +144,9 @@ export default function ReadAlphabets({
                   key={lang + alphabetObj.alphabet + "letter"}
                   item
                   xs={5}
+                  className="bookborder-left"
                 >
-                  <div>
+                  <div className="leftpage">
                     <span
                       className="letter-head"
                       // onClick={() => routeChange(lang, alphabetsObj.type)}
@@ -165,7 +168,12 @@ export default function ReadAlphabets({
                     </Typography>
                   </div>
                 </Grid>
-                <Grid key={lang + alphabetObj.alphabet + "canvas"} item xs={5}>
+                <Grid
+                  borderLeft={1}
+                  key={lang + alphabetObj.alphabet + "canvas"}
+                  className="bookborder-right"
+                  xs={5}
+                >
                   <MousePaintPreview
                     lang={lang}
                     letter={alphabetObj.alphabet}
@@ -192,14 +200,10 @@ const FilterContainer = styled.div`
 const MousePaintPreviewItem = styled.div`
   background-color: white;
   border-radius: 5px;
-  border-color: black;
   border: 2px solid #aea7a1;
   flex-direction: column;
   margin: 20px auto;
   color: black;
   font-size: 120%;
   padding: 20px;
-  :hover {
-    background-color: #ebf7ee;
-  }
 `;

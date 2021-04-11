@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
     width: 50
   },
   control: {
-    padding: theme.spacing(2)
+    padding: theme.spacing(0)
   }
 }));
 export default function MousePaint(props) {
@@ -117,7 +117,7 @@ export default function MousePaint(props) {
       <h3>
         Drawing...{letter} <small>({lang})</small>
       </h3>
-      <Grid container justify="center" spacing={1}>
+      <Grid container justify="center" spacing={0}>
         <Grid key="1" item xs={8}>
           <SliderPicker
             color={state.color}

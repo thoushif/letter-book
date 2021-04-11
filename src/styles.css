@@ -40,8 +40,9 @@ body {
   margin: auto 40px;
 }
 
-.show-only-drawn {
+.floatRight {
   float: right;
+  /* text-transform: none; */
 }
 .letter-head {
   font-size: 5rem;
@@ -54,4 +55,34 @@ body {
   50% {
     opacity: 0;
   }
+}
+/*
+.bookborder-right {
+  box-shadow: 5px 0px 0px 2px #cdc9c3, 10px 0px 0px 2px #fbf7f0,
+    15px 0px 0px 2px #cdc9c3, 20px 0px 0px 2px #fbf7f0,
+    -8px 0px 11px 8px #cdc9c3;
+    
+  -17px -20px 6px 3px rgba(40, 159, 237, 0);
+  box-shadow: 11px 1px 11px -1px #000000;  
+}
+.bookborder-left {
+  box-shadow: -5px 0px 0px 2px #cdc9c3, -10px 0px 0px 2px #fbf7f0,
+    -15px 0px 0px 2px #cdc9c3, -20px 0px 0px 2px #fbf7f0,
+    8px 0px 11px 8px #cdc9c3;
+ }
+
+@media (max-width: 600px) {
+  .bookborder-left {
+    box-shadow: none;
+  }
+  .bookborder-right {
+    box-shadow: none;
+     
+    -17px -20px 6px 3px rgba(40, 159, 237, 0);
+    box-shadow: 11px 1px 11px -1px #000000;  
+  }
+} */
+
+.leftpage {
+  margin-left: 25px;
 }

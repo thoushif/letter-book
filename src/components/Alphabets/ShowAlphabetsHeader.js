@@ -52,10 +52,7 @@ const AlphabetItem = styled.div`
   color: black;
   font-size: 120%;
   padding: 2px;
-  :hover {
-    background-color: grey;
-    cursor: pointer;
-  }
+
   .seeyourname {
     padding: 2px;
     color: green;
