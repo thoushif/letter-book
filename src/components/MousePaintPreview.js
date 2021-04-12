@@ -323,7 +323,6 @@ export default function MousePaintPreview({ lang, letter, showOthers }) {
             otherPaints.map((eachPaint) => {
               return (
                 <Fragment
-                  className="height-check"
                   key={letter + lang + eachPaint.userId + paintCanvasOperation}
                 >
                   <hr></hr>

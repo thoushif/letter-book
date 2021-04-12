@@ -107,7 +107,7 @@ export default function CustomizedAccordions({ languages }) {
       .collection("languages")
       .get();
     favoriteLangs.then((favoriteLang) => {
-      // console.log("favoriteLang", favoriteLang);
+      console.log("favoriteLang", favoriteLang);
       favoriteLang.forEach(function (favoriteLang) {
         if (favoriteLang.data().isActive) {
           setFavoritelanguages((favoritelanguages) => ({
@@ -123,28 +123,37 @@ export default function CustomizedAccordions({ languages }) {
 
   const unfavouriteThisLang = (e, lang) => {
     e.stopPropagation();
-
+    // setForceRefresh(false);
     const favoriteObj = db
       .collection("favorites")
       .doc(userObj.uid)
       .collection("languages")
-      .doc(lang.name);
-    favoriteObj.get().then((doc) => {
+      .doc(lang.name)
+      .get();
+    favoriteObj.then((doc) => {
       if (doc.exists) {
-        favoriteObj.update({
-          isActive: false
-        });
+        db.collection("favorites")
+          .doc(userObj.uid)
+          .collection("languages")
+          .doc(lang.name)
+          .update({
+            isActive: false
+          });
         console.log(doc.data());
       }
     });
-    setForceRefresh(!forceRefresh);
+    Promise.all([favoriteObj]).then(() => {
+      console.log("un favouriting------finished->");
+      setForceRefresh((forceRefresh) => !forceRefresh);
+    });
   };
 
   const favouriteThisLang = (e, lang) => {
     e.stopPropagation();
     console.log("favouriting------->", lang);
-
-    db.collection("favorites")
+    // setForceRefresh(false);
+    const p1 = db
+      .collection("favorites")
       .doc(userObj.uid)
       .collection("languages")
       .doc(lang.name)
@@ -156,7 +165,9 @@ export default function CustomizedAccordions({ languages }) {
         },
         { merge: true }
       );
-    setForceRefresh(!forceRefresh);
+    Promise.all([p1]).then(() => {
+      setForceRefresh((forceRefresh) => !forceRefresh);
+    });
   };
 
   const handleChange = (panel, lang) => (event, newExpanded) => {
@@ -166,14 +177,15 @@ export default function CustomizedAccordions({ languages }) {
     setFavoritelanguages(favoritelanguagesInitState);
   };
   useEffect(() => {
+    console.log("rerending");
     if (userObj) readFavoriteLangFromDB(userObj.uid);
     readAlphabetFromDB(langSelected);
     return cleanup;
   }, [langSelected, expanded, forceRefresh]);
   const cleanup = () => {
     setLangSelected();
-    setAlphabetsDB(alphabetInitState);
     setFavoritelanguages(favoritelanguagesInitState);
+    setAlphabetsDB(alphabetInitState);
   };
   const history = useHistory();
   const routeChange = (lang) => {
@@ -183,8 +195,9 @@ export default function CustomizedAccordions({ languages }) {
   return (
     <div>
       {/* {favoritelanguages.favoritelanguages.map((fav) => (
-        <p>{fav}</p>
+        <p key={fav + forceRefresh}>{fav}</p>
       ))} */}
+      {forceRefresh ? "forceRefresh on" : "forceRefresh off"}
       {languages.map((lang, i) => (
         <Fragment key={lang.name}>
           <Accordion

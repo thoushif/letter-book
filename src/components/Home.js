@@ -22,7 +22,7 @@ export default function Home() {
           {/* <MenuBookIcon color="action" /> */}
         </Link>
         <LogoutButton onClick={logOut}>Logout</LogoutButton>
-        <Button className="floatRight" component={Link} to={"/favorites"}>
+        <Button className="floatRight" component={Link} to={"/profile"}>
           Profile
           {/* <MenuBookIcon color="action" /> */}
         </Button>
@@ -38,9 +38,18 @@ export default function Home() {
         <Switch>
           <Route path="/" exact component={Header} />
           <Route path="/see-your-name/:lang" component={ShowNames} />
-          <Route path="/draw/:lang/:letter" component={LetterPreview} />
+          <Route
+            path="/draw/:lang/:letter"
+            render={({ match }) => (
+              <LetterPreview
+                lang={match.params.lang}
+                letter={match.params.letter}
+              />
+            )}
+            // component={LetterPreview}
+          />
           <Route path="/draw/:lang" component={ReadAlphabets} />
-          <Route path="/favorites" component={Favorites} />
+          <Route path="/profile" component={Favorites} />
           <Route path="/draw" component={Draw} />
           <Route render={() => <h1>404: page not found</h1>} />
         </Switch>
