@@ -1,4 +1,4 @@
-import { Button, Typography } from "@material-ui/core";
+import { Button, CircularProgress, Typography } from "@material-ui/core";
 import { Fragment, useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { db } from "../firebase";
@@ -8,11 +8,15 @@ import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 export const Favorites = () => {
   const userObj = useContext(UserContext);
 
+  const [loadingFavLangs, setLoadingFavLangs] = useState(false);
+  const [loadingFavLetters, setLoadingFavLetters] = useState(false);
+
   const favoriteLettersInitState = { favoriteLetters: [] };
   const [favoriteLetters, setFavoriteLetters] = useState(
     favoriteLettersInitState
   );
   const readFavoriteLettersFromDB = (user) => {
+    setLoadingFavLetters(true);
     setFavoriteLetters(favoriteLettersInitState);
 
     const favoriteLetters = db
@@ -34,12 +38,17 @@ export const Favorites = () => {
         }
       });
     });
+    Promise.all([favoriteLetters]).then(() => {
+      console.log("loading letters------finished->");
+      setLoadingFavLetters(false);
+    });
   };
   const favoritelanguagesInitState = { favoritelanguages: [] };
   const [favoritelanguages, setFavoritelanguages] = useState(
     favoritelanguagesInitState
   );
   const readFavoriteLangFromDB = (user) => {
+    setLoadingFavLangs(true);
     setFavoritelanguages(favoritelanguagesInitState);
 
     const favoriteLangs = db
@@ -60,6 +69,10 @@ export const Favorites = () => {
         }
       });
     });
+    Promise.all([favoriteLangs]).then(() => {
+      console.log("loading------finished->");
+      setLoadingFavLangs(false);
+    });
   };
   const history = useHistory();
   const routeChange = (lang, letter) => {
@@ -78,6 +91,8 @@ export const Favorites = () => {
   const cleanup = () => {
     setFavoritelanguages(favoritelanguagesInitState);
     setFavoriteLetters(favoriteLettersInitState);
+    setLoadingFavLetters(false);
+    setLoadingFavLangs(false);
   };
 
   return (
@@ -91,7 +106,9 @@ export const Favorites = () => {
       <Typography gutterBottom variant="h5">
         Favorite Languages
       </Typography>
-      {favoritelanguages.favoritelanguages.length > 0 ? (
+      {loadingFavLangs ? (
+        <CircularProgress />
+      ) : favoritelanguages.favoritelanguages.length > 0 ? (
         favoritelanguages.favoritelanguages.map((fav) => (
           <Button key={fav}>
             <Typography
@@ -109,8 +126,9 @@ export const Favorites = () => {
       <Typography gutterBottom variant="h5">
         Favorite Letters
       </Typography>
-
-      {favoriteLetters.favoriteLetters.length > 0 ? (
+      {loadingFavLetters ? (
+        <CircularProgress />
+      ) : favoriteLetters.favoriteLetters.length > 0 ? (
         favoriteLetters.favoriteLetters.map((fav) => (
           <Button key={fav.favletter}>
             <Typography

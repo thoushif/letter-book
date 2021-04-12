@@ -15,11 +15,7 @@ import KeyboardArrowLeftRoundedIcon from "@material-ui/icons/KeyboardArrowLeftRo
 import KeyboardArrowRightRoundedIcon from "@material-ui/icons/KeyboardArrowRightRounded";
 // import background from "../src/data/blank-open-book.jpg";
 
-export default function LetterPreview({
-  match: {
-    params: { lang, letter }
-  }
-}) {
+export default function LetterPreview({ lang, letter }) {
   const alphabetsLangObj = db.collection("languages");
   const alphabetsObj = db.collection("languages").where("name", "==", lang);
   const userObj = useContext(UserContext);
@@ -142,16 +138,25 @@ export default function LetterPreview({
       .collection("favorites")
       .doc(userObj.uid)
       .collection("letters")
-      .doc(letter);
-    favoriteObj.get().then((doc) => {
+      .doc(letter)
+      .get();
+    favoriteObj.then((doc) => {
       if (doc.exists) {
-        favoriteObj.update({
-          isActive: false
-        });
+        db.collection("favorites")
+          .doc(userObj.uid)
+          .collection("letters")
+          .doc(letter)
+          .update({
+            isActive: false
+          });
         console.log(doc.data());
       }
     });
     setForceRefresh(!forceRefresh);
+    Promise.all([favoriteObj]).then(() => {
+      console.log("un favouriting------finished->");
+      setForceRefresh((forceRefresh) => !forceRefresh);
+    });
   };
 
   const favouriteThisLetter = (e, letter) => {
@@ -170,6 +175,7 @@ export default function LetterPreview({
         },
         { merge: true }
       );
+
     setForceRefresh(!forceRefresh);
   };
 
