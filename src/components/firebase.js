@@ -3,17 +3,11 @@ import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
 import "@firebase/firestore";
+import { configurations } from "./providers/configurations";
 
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyCtC3fr-3ZUNY1ZViFimVZts3EvZMpmtfw",
-  authDomain: "clean-ly-1549911706182.firebaseapp.com",
-  projectId: "clean-ly-1549911706182",
-  storageBucket: "clean-ly-1549911706182.appspot.com",
-  messagingSenderId: "850990738516",
-  appId: "1:850990738516:web:4ee087eb64d24c4ec2d1c1",
-  measurementId: "G-DFRSGDFBH9"
-};
+console.log("=====>", configurations());
+const firebaseConfig = configurations();
 
 // firebase.initializeApp(firebaseConfig);
 if (!firebase.apps.length) {

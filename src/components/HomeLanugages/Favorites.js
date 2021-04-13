@@ -97,6 +97,7 @@ export const Favorites = () => {
 
   return (
     <div>
+      {process.env.NODE_ENV}
       {userObj && (
         <div>
           <img src={userObj.photoURL} alt="profile" />
