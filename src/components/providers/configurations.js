@@ -1,4 +1,5 @@
 export const configurations = () => {
+  console.log("NODE_ENV",process.env.NODE_ENV)
   if (process.env.NODE_ENV === "development") {
     return {
       apiKey: "AIzaSyCtC3fr-3ZUNY1ZViFimVZts3EvZMpmtfw",
