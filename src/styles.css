@@ -42,10 +42,18 @@ body {
 
 .floatRight {
   float: right;
+  margin-bottom: 20px;
   /* text-transform: none; */
 }
 .letter-head {
   font-size: 5rem;
+  cursor: pointer;
+}
+.letter-head-preview {
+  font-size: 5rem;
+}
+.letter-head:hover {
+  box-shadow: 5px 0px 0px 2px #cdc9c3;
 }
 .flasher {
   animation: flasher 1s linear infinite;

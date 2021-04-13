@@ -6,7 +6,7 @@ import styled from "styled-components";
 import MousePaintPreview from "../MousePaintPreview";
 import { db } from "../firebase";
 import { useHistory } from "react-router-dom";
-import { Button, Grid, Typography } from "@material-ui/core";
+import { Button, Grid, Typography, CircularProgress } from "@material-ui/core";
 import { Usage } from "./Usage";
 
 export default function ReadAlphabets({
@@ -34,20 +34,23 @@ export default function ReadAlphabets({
       });
     });
   };
-  // const history = useHistory();
-  // const routeChange = (lang, alphabet) => {
-  //   let path = `/draw/${lang}/${alphabet}`;
-  //   history.push(path);
-  // };
+  const history = useHistory();
+  const routeChange = (lang, alphabet) => {
+    console.log("======>", lang, alphabet);
+    let path = `/draw/${lang}/${alphabet}`;
+    history.push(path);
+  };
+
   const alphabetInitState = { alphabets: [] };
   const [alphabetsDB, setAlphabetsDB] = useState(alphabetInitState);
   const alphabetsObj = db.collection("languages").where("name", "==", lang);
   const alphabetsLangObj = db.collection("languages");
   const readAlphabetFromDB = (type) => {
+    let letters;
     let result = alphabetsObj.get();
     result.then((querySnapshot) => {
       querySnapshot.forEach(function (doc) {
-        const letters = type
+        letters = type
           ? alphabetsLangObj
               .doc(doc.id)
               .collection("letters")
@@ -89,7 +92,9 @@ export default function ReadAlphabets({
   const cleanUp = () => {
     setAlphabetsDB(alphabetInitState);
   };
-  return (
+  return alphabetsDB.alphabets.length <= 0 ? (
+    <CircularProgress />
+  ) : (
     <div>
       <Typography>
         Language : {langDB.displayName}
@@ -99,9 +104,9 @@ export default function ReadAlphabets({
         Alphabets :{" "}
         {showOnlyDrawn ? showOnlyDrawn + langDB.pluralSymbol : "Showing all"}
       </Typography>
-      {alphabetsDB.alphabets && (
-        <ShowAlphabetsHeader alphabets={alphabetsDB.alphabets} lang={lang} />
-      )}
+
+      <ShowAlphabetsHeader alphabets={alphabetsDB.alphabets} lang={lang} />
+
       <FilterContainer>
         {langDB.types &&
           langDB.types.map((type) => (
@@ -129,7 +134,9 @@ export default function ReadAlphabets({
       </FilterContainer>
       {/* todo: this will be the social feed  NOT for all alphabets*/}
       <MousePaintPreviewContainer>
-        {alphabetsDB.alphabets &&
+        {alphabetsDB.alphabets && alphabetsDB.alphabets.length <= 0 ? (
+          <CircularProgress />
+        ) : (
           alphabetsDB.alphabets.map((alphabetObj) => (
             <MousePaintPreviewItem key={lang + alphabetObj.alphabet}>
               <Grid
@@ -149,7 +156,7 @@ export default function ReadAlphabets({
                   <div className="leftpage">
                     <span
                       className="letter-head"
-                      // onClick={() => routeChange(lang, alphabetsObj.type)}
+                      onClick={() => routeChange(lang, alphabetObj.alphabet)}
                     >
                       {alphabetObj.alphabet}
                     </span>
@@ -169,7 +176,6 @@ export default function ReadAlphabets({
                   </div>
                 </Grid>
                 <Grid
-                  borderLeft={1}
                   key={lang + alphabetObj.alphabet + "canvas"}
                   className="bookborder-right"
                   xs={5}
@@ -181,7 +187,8 @@ export default function ReadAlphabets({
                 </Grid>
               </Grid>
             </MousePaintPreviewItem>
-          ))}
+          ))
+        )}
       </MousePaintPreviewContainer>
     </div>
   );

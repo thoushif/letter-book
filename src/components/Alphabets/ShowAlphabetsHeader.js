@@ -9,7 +9,7 @@ export const ShowAlphabetsHeader = ({ alphabets, lang }) => {
   };
   return (
     <AlphabetItemContainer>
-      {/* {alphabetsObjs.length} */}
+      {/* {alphabets.length} */}
       {alphabets &&
         alphabets.map((alphabetsObj) => (
           // <AlphabetItem key={alphabet}>
