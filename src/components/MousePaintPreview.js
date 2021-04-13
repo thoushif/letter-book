@@ -292,7 +292,7 @@ export default function MousePaintPreview({ lang, letter, showOthers }) {
         showCanvas === "false" &&
         !showOthers && (
           <Fragment>
-            <Typography>
+            <Typography color="secondary">
               You have not drawn {letter} yet! add in yours
               <Button
                 onClick={() => {

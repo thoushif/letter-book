@@ -13,6 +13,7 @@ import StarOutlineOutlinedIcon from "@material-ui/icons/StarOutlineOutlined";
 import { UserContext } from "../providers/UserProvider";
 import firebase from "firebase/app";
 import StarOutlinedIcon from "@material-ui/icons/StarOutlined";
+import { Button } from "@material-ui/core";
 
 import { useContext } from "react";
 const Accordion = withStyles({
@@ -56,7 +57,7 @@ const AccordionDetails = withStyles((theme) => ({
   }
 }))(MuiAccordionDetails);
 
-export default function CustomizedAccordions({ languages }) {
+export default function CustomizedAccordions({ languages, filterLanguages }) {
   const [expanded, setExpanded] = useState("panel1");
   const [langSelected, setLangSelected] = useState();
   const alphabetInitState = { alphabets: [] };
@@ -197,57 +198,64 @@ export default function CustomizedAccordions({ languages }) {
       {/* {favoritelanguages.favoritelanguages.map((fav) => (
         <p key={fav + forceRefresh}>{fav}</p>
       ))} */}
-      {forceRefresh ? "forceRefresh on" : "forceRefresh off"}
-      {languages.map((lang, i) => (
-        <Fragment key={lang.name}>
-          <Accordion
-            square
-            expanded={expanded === `panel + ${i + 1}`}
-            onChange={handleChange(`panel + ${i + 1}`, lang)}
-            disabled={!lang.enabled}
-          >
-            <AccordionSummary
-              aria-controls={`panel + ${i + 1}d-content`}
-              id={`panel + ${i + 1}d-header`}
-              expandIcon={<ArrowForwardIosIcon />}
+      {languages
+        .filter((lang) => {
+          if (filterLanguages)
+            return favoritelanguages.favoritelanguages.includes(lang.name);
+          else return true;
+        })
+        .map((lang, i) => (
+          <Fragment key={lang.name}>
+            <Accordion
+              square
+              expanded={expanded === `panel + ${i + 1}`}
+              onChange={handleChange(`panel + ${i + 1}`, lang)}
+              disabled={!lang.enabled}
             >
-              <Typography variant="h4" onClick={() => routeChange(lang.name)}>
-                {lang.displayName}
-                {!favoritelanguages.favoritelanguages.includes(lang.name) ? (
-                  <Tooltip title="Add to favorite">
-                    <StarOutlineOutlinedIcon
-                      onClick={(e) => favouriteThisLang(e, lang, userObj.uid)}
-                    ></StarOutlineOutlinedIcon>
-                  </Tooltip>
-                ) : (
-                  <Tooltip title="Remove from favorite">
-                    <StarOutlinedIcon
-                      onClick={(e) => unfavouriteThisLang(e, lang, userObj.uid)}
-                    ></StarOutlinedIcon>
-                  </Tooltip>
-                )}
-              </Typography>
-              {/* <Typography
+              <AccordionSummary
+                aria-controls={`panel + ${i + 1}d-content`}
+                id={`panel + ${i + 1}d-header`}
+                expandIcon={<ArrowForwardIosIcon />}
+              >
+                <Typography variant="h4" onClick={() => routeChange(lang.name)}>
+                  {lang.displayName}
+                  {!favoritelanguages.favoritelanguages.includes(lang.name) ? (
+                    <Tooltip title="Add to favorite">
+                      <StarOutlineOutlinedIcon
+                        onClick={(e) => favouriteThisLang(e, lang, userObj.uid)}
+                      ></StarOutlineOutlinedIcon>
+                    </Tooltip>
+                  ) : (
+                    <Tooltip title="Remove from favorite">
+                      <StarOutlinedIcon
+                        onClick={(e) =>
+                          unfavouriteThisLang(e, lang, userObj.uid)
+                        }
+                      ></StarOutlinedIcon>
+                    </Tooltip>
+                  )}
+                </Typography>
+                {/* <Typography
                 styles={{ float: "right" }}
                 onClick={() => routeChange(lang.name)}
               >
                 <ArrowForwardIosIcon />
               </Typography> */}
-            </AccordionSummary>
-            <AccordionDetails>
-              <Typography>
-                {alphabetsDB.alphabets && (
-                  <ShowAlphabetsHeader
-                    alphabets={alphabetsDB.alphabets}
-                    lang={lang.name}
-                  />
-                )}
-                {/* {alphabetsDB.alphabets} */}
-              </Typography>
-            </AccordionDetails>
-          </Accordion>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Typography>
+                  {alphabetsDB.alphabets && (
+                    <ShowAlphabetsHeader
+                      alphabets={alphabetsDB.alphabets}
+                      lang={lang.name}
+                    />
+                  )}
+                  {/* {alphabetsDB.alphabets} */}
+                </Typography>
+              </AccordionDetails>
+            </Accordion>
 
-          {/* <Grid
+            {/* <Grid
               container
               direction="row"
               justify="flex-start"
@@ -265,8 +273,8 @@ export default function CustomizedAccordions({ languages }) {
                 </Link>
               </Grid>
             </Grid> */}
-        </Fragment>
-      ))}
+          </Fragment>
+        ))}
     </div>
   );
 }

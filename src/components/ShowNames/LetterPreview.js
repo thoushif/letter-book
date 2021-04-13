@@ -248,7 +248,7 @@ export default function LetterPreview({ lang, letter }) {
             {prevAlphabetsDB && prevAlphabetsDB.alphabet && (
               <Chip
                 key={prevAlphabetsDB.alphabet}
-                color="action"
+                color="default"
                 label={prevAlphabetsDB.alphabet.toUpperCase()}
                 avatar={<KeyboardArrowLeftRoundedIcon />}
                 size="medium"
@@ -259,7 +259,9 @@ export default function LetterPreview({ lang, letter }) {
               />
             )}
             <div className="leftpage">
-              <span className="letter-head">{alphabetsDB.alphabet}</span>
+              <span className="letter-head-preview">
+                {alphabetsDB.alphabet}
+              </span>
 
               {!favoriteLetters.favoriteLetters.includes(
                 alphabetsDB.alphabet
@@ -314,7 +316,7 @@ export default function LetterPreview({ lang, letter }) {
               {nextAlphabetsDB && nextAlphabetsDB.alphabet && (
                 <Chip
                   key={nextAlphabetsDB.alphabet}
-                  color="action"
+                  color="default"
                   label={nextAlphabetsDB.alphabet.toUpperCase()}
                   size="medium"
                   avatar={<KeyboardArrowRightRoundedIcon />}
