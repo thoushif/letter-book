@@ -23,18 +23,5 @@ const provider = new firebase.auth.GoogleAuthProvider();
 provider.setCustomParameters({
   promt: "select_account"
 });
-export const logOut = () => {
-  const result = window.confirm("Are you sure you want to logout?");
-  if (result) {
-    auth
-      .signOut()
-      .then(() => {
-        console.log("logged out");
-      })
-      .catch((error) => {
-        console.log(error.message);
-      });
-  }
-};
 export const signInWithGoogle = () => auth.signInWithPopup(provider);
 export { db };

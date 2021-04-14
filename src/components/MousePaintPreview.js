@@ -7,7 +7,13 @@ import VoteButtons from "./VoteActions/VoteButtons";
 import styled from "styled-components";
 import EditRoundedIcon from "@material-ui/icons/EditRounded";
 import DeleteForeverRoundedIcon from "@material-ui/icons/DeleteForeverRounded";
-import { Button, Dialog, Tooltip, Typography } from "@material-ui/core";
+import {
+  Button,
+  Dialog,
+  Divider,
+  Tooltip,
+  Typography
+} from "@material-ui/core";
 import ListAltRoundedIcon from "@material-ui/icons/ListAltRounded";
 import OthersLetterPreview from "./ShowNames/OthersLetterPreview";
 import PostAddRoundedIcon from "@material-ui/icons/PostAddRounded";
@@ -91,7 +97,8 @@ export default function MousePaintPreview({ lang, letter, showOthers }) {
       .doc(letter)
       .collection("users")
       .doc(userObj.uid)
-      .onSnapshot((snapshot) => {
+      .get()
+      .then((snapshot) => {
         if (snapshot.exists) {
           canvasDBObj = snapshot.data();
           if (canvasDBObj.isActive) {
@@ -309,7 +316,7 @@ export default function MousePaintPreview({ lang, letter, showOthers }) {
       )}
       {otherPaintsCount > 0 && (
         <OthersPaintsContianer>
-          {showOthers && (
+          {!showOthers && (
             <div
               onClick={() => routeChange(lang, letter)}
               role="img"
@@ -325,7 +332,10 @@ export default function MousePaintPreview({ lang, letter, showOthers }) {
                 <Fragment
                   key={letter + lang + eachPaint.userId + paintCanvasOperation}
                 >
-                  <hr></hr>
+                  <Typography>
+                    <small>By {eachPaint.userName}</small>{" "}
+                  </Typography>
+                  <Divider />
                   <div
                     style={{ cursor: "pointer" }}
                     onClick={() =>
@@ -335,8 +345,8 @@ export default function MousePaintPreview({ lang, letter, showOthers }) {
                     <CanvasDraw
                       className="canvas"
                       disabled
-                      canvasWidth={paintCanvasInitialState.width}
-                      canvasHeight={paintCanvasInitialState.height}
+                      canvasWidth={paintCanvasInitialState.width + 50}
+                      canvasHeight={paintCanvasInitialState.height + 50}
                       brushRadius={paintCanvasInitialState.brushRadius}
                       lazyRadius={paintCanvasInitialState.lazyRadius}
                       saveData={eachPaint.canvasData}
@@ -344,6 +354,8 @@ export default function MousePaintPreview({ lang, letter, showOthers }) {
                     />
                   </div>
                   <Dialog
+                    maxWidth="xs"
+                    fullWidth="xs"
                     open={openOthersPreview}
                     onClose={() => handleCloseOthersPreview()}
                   >
@@ -352,14 +364,13 @@ export default function MousePaintPreview({ lang, letter, showOthers }) {
                       self="no"
                     />
                   </Dialog>
-                  <Typography>
-                    <small>by {eachPaint.userName}</small>{" "}
-                  </Typography>
+
                   <VoteButtons
                     key={eachPaint.userId + letter}
                     letter={letter}
                     userId={eachPaint.userId}
                   />
+                  <hr></hr>
                 </Fragment>
               );
             })}
@@ -372,10 +383,10 @@ export default function MousePaintPreview({ lang, letter, showOthers }) {
 const OthersPaintsContianer = styled.div`
   background-color: #edf5ef;
   box-shadow: inset 0 0 10px white;
-  margin-top: 10px;
+  margin-top: 30px;
 
+  /* overflow-y: scroll; */
   .canvas {
     margin-left: 35px;
-    /* overflow-y: scroll; */
   }
 `;

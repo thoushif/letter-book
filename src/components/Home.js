@@ -1,8 +1,15 @@
 import { Fragment, useContext } from "react";
 import styled from "styled-components";
-import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Link,
+  Switch,
+  useHistory
+} from "react-router-dom";
 import ReadAlphabets from "./Alphabets/ReadAlphabets";
-import { logOut } from "./firebase";
+import firebase from "firebase/app";
+
 import Languages from "./Languages";
 import { UserContext } from "./providers/UserProvider";
 
@@ -14,6 +21,23 @@ import { Favorites } from "./HomeLanugages/Favorites";
 
 export default function Home() {
   const user = useContext(UserContext);
+  const history = useHistory();
+
+  const logOut = () => {
+    const result = window.confirm("Are you sure you want to logout?");
+    if (result) {
+      firebase
+        .auth()
+        .signOut()
+        .then(() => {
+          console.log("logged out");
+        })
+        .catch((error) => {
+          console.log(error.message);
+        });
+    }
+  };
+
   return (
     <Router>
       <Container>

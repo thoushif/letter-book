@@ -139,15 +139,8 @@ export default function ReadAlphabets({
         ) : (
           alphabetsDB.alphabets.map((alphabetObj) => (
             <MousePaintPreviewItem key={lang + alphabetObj.alphabet}>
-              <Grid
-                container
-                spacing={0}
-                justify="center"
-
-                // alignItems="center"
-              >
+              <Grid container spacing={0} justify="center" alignItems="center">
                 <Grid
-                  alignItems="center"
                   key={lang + alphabetObj.alphabet + "letter"}
                   item
                   xs={5}

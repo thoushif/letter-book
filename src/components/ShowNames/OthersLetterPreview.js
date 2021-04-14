@@ -11,28 +11,7 @@ export default function OthersLetterPreview({ canvasPreviewState, self }) {
   return (
     <Fragment>
       {/* {self === "yes" ? "showing mine" : "showing others"} */}
-      <ButtonGroup
-        variant="contained"
-        color="primary"
-        size="small"
-        aria-label="contained primary button group"
-      >
-        <Button onClick={() => setpreviewTime(30)}>
-          <Tooltip title="slow">
-            <span>Slower</span>
-          </Tooltip>
-        </Button>
-        <Button onClick={() => setpreviewTime(15)}>
-          <Tooltip title="medium">
-            <span>Medium</span>
-          </Tooltip>
-        </Button>
-        <Button onClick={() => setpreviewTime(5)}>
-          <Tooltip title="fast">
-            <span>Fast</span>
-          </Tooltip>
-        </Button>
-      </ButtonGroup>
+
       {self === "no" ? (
         <Fragment>
           <OthersCanvasDraw
@@ -72,6 +51,22 @@ export default function OthersLetterPreview({ canvasPreviewState, self }) {
           </Fragment>
         )
       )}
+
+      <Button size="small" onClick={() => setpreviewTime(30)}>
+        <Tooltip title="slow">
+          <span> Show Slower</span>
+        </Tooltip>
+      </Button>
+      <Button size="small" onClick={() => setpreviewTime(15)}>
+        <Tooltip title="medium">
+          <span>Medium</span>
+        </Tooltip>
+      </Button>
+      <Button size="small" onClick={() => setpreviewTime(5)}>
+        <Tooltip title="fast">
+          <span>Fast</span>
+        </Tooltip>
+      </Button>
     </Fragment>
   );
 }
@@ -82,8 +77,8 @@ function OthersCanvasDraw({ canvasPreviewState, canvasData, previewTime }) {
       <CanvasDraw
         key={previewTime}
         disabled
-        canvasWidth={canvasPreviewState.width + 100}
-        canvasHeight={canvasPreviewState.height + 100}
+        canvasWidth={canvasPreviewState.width + 300}
+        canvasHeight={canvasPreviewState.height + 300}
         brushRadius={canvasPreviewState.brushRadius}
         lazyRadius={canvasPreviewState.lazyRadius}
         saveData={canvasData}

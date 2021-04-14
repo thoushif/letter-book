@@ -13,12 +13,14 @@ export default function Languages(props) {
   const [filterLanguages, setFilterLanguages] = useState(false);
 
   useEffect(() => {
-    db.collection("languages").onSnapshot((snapshot) => {
-      let lng = [];
-      lng = snapshot.docs.map((doc) => doc.data()).map((e) => e);
-      console.log(lng);
-      setLangDB(lng);
-    });
+    db.collection("languages")
+      .get()
+      .then((snapshot) => {
+        let lng = [];
+        lng = snapshot.docs.map((doc) => doc.data()).map((e) => e);
+        console.log(lng);
+        setLangDB(lng);
+      });
   }, []);
 
   return (
