@@ -97,8 +97,7 @@ export default function MousePaintPreview({ lang, letter, showOthers }) {
       .doc(letter)
       .collection("users")
       .doc(userObj.uid)
-      .get()
-      .then((snapshot) => {
+      .onSnapshot((snapshot) => {
         if (snapshot.exists) {
           canvasDBObj = snapshot.data();
           if (canvasDBObj.isActive) {
