@@ -302,7 +302,8 @@ export default function VoteButtons({ letter, userId }) {
       </Button>
       <Button
         color="primary"
-        variant="contained"
+        variant="outlined"
+        size="small"
         onClick={() => handleClickOpenVotePreview()}
       >
         <Typography>
