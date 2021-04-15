@@ -4,10 +4,16 @@ import { db } from "../firebase";
 import firebase from "firebase/app";
 import ThumbUpAltTwoToneIcon from "@material-ui/icons/ThumbUpAltTwoTone";
 import ThumbDownAltTwoToneIcon from "@material-ui/icons/ThumbDownAltTwoTone";
-import { Button, Dialog, Tooltip, Typography } from "@material-ui/core";
+import {
+  Button,
+  ButtonGroup,
+  Dialog,
+  Tooltip,
+  Typography
+} from "@material-ui/core";
 import { Voters } from "./Voters";
 
-export default function VoteButtons({ letter, userId }) {
+export default function VoteButtons({ letter, userId, self }) {
   const user = useContext(UserContext);
   const [likeCount, setLikeCount] = useState();
   const [dislikeCount, setDislikeCount] = useState();
@@ -280,29 +286,33 @@ export default function VoteButtons({ letter, userId }) {
     <div>
       {/* {likeDone ? "you liked" : "not yet liked"}
       {dislikeDone ? "you disliked" : "not yet disliked"} */}
+      {!self && (
+        <ButtonGroup variant="text">
+          <Button disabled={upvoteDisabled} onClick={() => vote(true)}>
+            <Tooltip title="like">
+              <ThumbUpAltTwoToneIcon
+                color={likeDone ? "primary" : ""}
+                fontSize="small"
+                // color={!likeDone ? "primary" : "secondary"}
+              />
+            </Tooltip>
+          </Button>
 
-      <Button disabled={upvoteDisabled} onClick={() => vote(true)}>
-        <Tooltip title="like">
-          <ThumbUpAltTwoToneIcon
-            color={likeDone ? "primary" : ""}
-            fontSize="small"
-            // color={!likeDone ? "primary" : "secondary"}
-          />
-        </Tooltip>
-      </Button>
-
-      {/* <Typography variant="caption">Likes</Typography> */}
-      <Button disabled={downvoteDisabled} onClick={() => vote(false)}>
-        <Tooltip title="Dislike">
-          <ThumbDownAltTwoToneIcon
-            fontSize="small"
-            color={dislikeDone ? "primary" : ""}
-          />
-        </Tooltip>
-      </Button>
+          {/* <Typography variant="caption">Likes</Typography> */}
+          <Button disabled={downvoteDisabled} onClick={() => vote(false)}>
+            <Tooltip title="Dislike">
+              <ThumbDownAltTwoToneIcon
+                fontSize="small"
+                color={dislikeDone ? "primary" : ""}
+              />
+            </Tooltip>
+          </Button>
+        </ButtonGroup>
+      )}
       <Button
         color="primary"
-        variant="outlined"
+        variant={self ? "contained" : "outlined"}
+        disabled={likeCount === 0 && dislikeCount === 0}
         size="small"
         onClick={() => handleClickOpenVotePreview()}
       >
@@ -311,6 +321,7 @@ export default function VoteButtons({ letter, userId }) {
           dislikes{" "}
         </Typography>
       </Button>
+      {votesByPpl.likedppl}
       <Dialog open={openPreview} onClose={() => handleCloseVotePreview()}>
         {votesByPpl.likedppl && votesByPpl.dislikedPpl && (
           <Voters votedPpl={votesByPpl} />

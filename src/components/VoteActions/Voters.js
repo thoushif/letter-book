@@ -98,7 +98,7 @@ export const Voters = ({ votedPpl }) => {
               alignItems="center"
             >
               <Grid item>
-                <Avatar alt={liker.userId} src={liker.photoURL} />
+                <Avatar alt={liker.userName} src={liker.photoURL} />
               </Grid>
               <Grid item>{liker.userName}</Grid>
               {user.uid === liker.userId && "(You)"}
@@ -129,7 +129,7 @@ export const Voters = ({ votedPpl }) => {
               alignItems="center"
             >
               <Grid item>
-                <Avatar alt={disliker.userId} src={disliker.photoURL} />
+                <Avatar alt={disliker.userName} src={disliker.photoURL} />
               </Grid>
               <Grid item> {disliker.userName}</Grid>
               {user.uid === disliker.userId && "(You)"}

@@ -4,10 +4,13 @@ import { Fragment, useEffect, useState } from "react";
 import CanvasDraw from "react-canvas-draw";
 import VoteButtons from "../VoteActions/VoteButtons";
 import date from "date-and-time";
+import TimeAgo from "javascript-time-ago";
+import en from "javascript-time-ago/locale/en";
+TimeAgo.addLocale(en);
 
 export default function OthersLetterPreview({ canvasPreviewState, self }) {
   const [previewTime, setpreviewTime] = useState(30);
-
+  const [timeAgo, setTimeAgo] = useState(new TimeAgo("en-US"));
   return (
     <Fragment>
       {/* {self === "yes" ? "showing mine" : "showing others"} */}
@@ -20,15 +23,14 @@ export default function OthersLetterPreview({ canvasPreviewState, self }) {
             previewTime={previewTime}
           />
           <Typography variant="subtitle2">
-            by {canvasPreviewState.eachPaint.userName}
-          </Typography>
-          <Typography variant="subtitle2">
-            Posted at{" "}
-            {date.format(
+            by {canvasPreviewState.eachPaint.userName}(
+            {timeAgo.format(
               new Date(canvasPreviewState.eachPaint.publishedAt.seconds * 1000),
-              "ddd, MMM DD YYYY HH:mm"
+              "twitter-now"
             )}
+            )
           </Typography>
+
           <VoteButtons
             key={
               canvasPreviewState.eachPaint.userId +
@@ -42,7 +44,7 @@ export default function OthersLetterPreview({ canvasPreviewState, self }) {
       ) : (
         canvasPreviewState && (
           <Fragment>
-            {/* <span>hello + {canvasPreviewState.saveData}</span> */}
+            <Typography variant="h6">Your Drawing!</Typography>
             <OthersCanvasDraw
               canvasPreviewState={canvasPreviewState}
               canvasData={canvasPreviewState.saveData}

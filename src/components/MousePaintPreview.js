@@ -7,19 +7,24 @@ import VoteButtons from "./VoteActions/VoteButtons";
 import styled from "styled-components";
 import EditRoundedIcon from "@material-ui/icons/EditRounded";
 import DeleteForeverRoundedIcon from "@material-ui/icons/DeleteForeverRounded";
+import GestureIcon from "@material-ui/icons/Gesture";
 import {
+  Badge,
   Button,
   Dialog,
   Divider,
   Tooltip,
   Typography
 } from "@material-ui/core";
-import ListAltRoundedIcon from "@material-ui/icons/ListAltRounded";
+import en from "javascript-time-ago/locale/en";
+
 import OthersLetterPreview from "./ShowNames/OthersLetterPreview";
 import PostAddRoundedIcon from "@material-ui/icons/PostAddRounded";
 import firebase from "firebase/app";
 import date from "date-and-time";
 import { useHistory } from "react-router-dom";
+import TimeAgo from "javascript-time-ago";
+TimeAgo.addLocale(en);
 
 export default function MousePaintPreview({ lang, letter, showOthers }) {
   const userObj = useContext(UserContext);
@@ -45,12 +50,14 @@ export default function MousePaintPreview({ lang, letter, showOthers }) {
   const [openPreview, setOpenPreview] = useState(false);
   const [openOthersPreview, setOpenOthersPreview] = useState(false);
   const [paintCanvasOperation, setOpenOthersPreviewOperation] = useState("");
-
+  const [timeAgo, setTimeAgo] = useState(new TimeAgo("en-US"));
   const [canvasPreviewState, setCanvasPreviewState] = useState(
     paintCanvasInitialState
   );
   useEffect(() => {
     // console.log("redrawing because", letter, paintCanvasOperation);
+    // TimeAgo.addDefaultLocale(en);
+    setTimeAgo(new TimeAgo("en-US"));
     getCanvasData(letter);
     getCanvasAllOthersData(letter);
     return cleanup;
@@ -235,10 +242,14 @@ export default function MousePaintPreview({ lang, letter, showOthers }) {
           </Dialog>
           <Typography variant="subtitle2">
             {paintCanvas.isPublished && paintCanvas.publishedAt
-              ? "Posted at " +
-                date.format(
+              ? "Posted " +
+                // date.format(
+                //   new Date(paintCanvas.publishedAt.seconds * 1000),
+                //   "ddd, MMM DD YYYY HH:mm"
+                // ) +
+                timeAgo.format(
                   new Date(paintCanvas.publishedAt.seconds * 1000),
-                  "ddd, MMM DD YYYY HH:mm"
+                  "twitter-now"
                 )
               : "Draft"}
             {showCanvas === "false" && !paintCanvas.isPublished && (
@@ -279,18 +290,25 @@ export default function MousePaintPreview({ lang, letter, showOthers }) {
           </Typography>
           {paintCanvas.isPublished && (
             <Typography variant="subtitle2">
-              <Button
-                onClick={() => {
-                  deleteCanvas("posted");
-                }}
-              >
-                <Tooltip title="Delete">
-                  <DeleteForeverRoundedIcon color="action" fontSize="small" />
-                </Tooltip>
-              </Button>
-              Likes: {paintCanvas.likeCount ? paintCanvas.likeCount : 0}{" "}
+              <Tooltip title="Delete">
+                <DeleteForeverRoundedIcon
+                  onClick={() => {
+                    deleteCanvas("posted");
+                  }}
+                  color="action"
+                  fontSize="small"
+                />
+              </Tooltip>
+
+              <VoteButtons
+                key={userObj.uid + letter}
+                letter={letter}
+                userId={userObj.uid}
+                self
+              />
+              {/* Likes: {paintCanvas.likeCount ? paintCanvas.likeCount : 0}{" "}
               Dislikes:{" "}
-              {paintCanvas.disLikeCount ? paintCanvas.disLikeCount : 0}{" "}
+              {paintCanvas.disLikeCount ? paintCanvas.disLikeCount : 0}{" "} */}
             </Typography>
           )}
         </Fragment>
@@ -313,7 +331,7 @@ export default function MousePaintPreview({ lang, letter, showOthers }) {
           </Fragment>
         )
       )}
-      {otherPaintsCount > 0 && (
+      {otherPaintsCount > 0 ? (
         <OthersPaintsContianer>
           {!showOthers && (
             <div
@@ -322,7 +340,12 @@ export default function MousePaintPreview({ lang, letter, showOthers }) {
               aria-label="open"
               style={{ cursor: "pointer" }}
             >
-              <Typography>{otherPaintsCount} drawings </Typography>
+              <Typography>
+                Other drawings
+                <Badge color="secondary" badgeContent={otherPaintsCount}>
+                  <GestureIcon />
+                </Badge>
+              </Typography>
             </div>
           )}
           {showOthers &&
@@ -374,6 +397,8 @@ export default function MousePaintPreview({ lang, letter, showOthers }) {
               );
             })}
         </OthersPaintsContianer>
+      ) : (
+        <Typography> No on else drawn!</Typography>
       )}
     </div>
   );
