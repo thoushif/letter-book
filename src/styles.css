@@ -7,6 +7,10 @@ body {
 
   background-size: cover;
   background-color: #dfdcda;
+  position: relative;
+  margin: 0;
+  padding-bottom: 6rem;
+  min-height: 100%;
 }
 
 .language {
@@ -99,4 +103,15 @@ body {
 
 .leftpage {
   margin-left: 25px;
+}
+
+.footer {
+  /* font-family: "Helvetica Neue", Arial, sans-serif; */
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 1rem;
+  background-image: linear-gradient(white, #c8e9ee);
+  text-align: center;
 }

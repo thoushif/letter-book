@@ -81,17 +81,17 @@ export default function Home({ user }) {
             <ExitToAppIcon color="secondary" />
           </Button>
         </ButtonGroup>
-        <Typography variant="h6" color="secondary">
+        <WhiteTextTypography variant="h4" color="secondary">
           Hi {user.displayName} !
-        </Typography>
-        <MenuItemContainer>
-          {/* <Link to="/see-your-name">See Your Name</Link> */}
-          {/* <LanguageItem key="all-languages">
+        </WhiteTextTypography>
+        {/* <MenuItemContainer> */}
+        {/* <Link to="/see-your-name">See Your Name</Link> */}
+        {/* <LanguageItem key="all-languages">
             <Link className="language" to={`/draw`}>
               ALL LANGUAGES
             </Link>
           </LanguageItem> */}
-        </MenuItemContainer>
+        {/* </MenuItemContainer> */}
         <Switch>
           <Route path="/" exact component={Header} />
           <Route path="/see-your-name/:lang" component={ShowNames} />
@@ -150,6 +150,7 @@ export const SiteDetails = ({ signinPage }) => (
 const Container = styled.div`
   /* trbl */
   margin: 0 250px 10px 250px;
+
   @media (max-width: 1000px) {
     flex-direction: column;
     margin: 0 50px 10px 50px;
@@ -159,11 +160,6 @@ const Container = styled.div`
     margin: 0 0px 10px 0px;
   }
   /* display: inline-flex; */
-`;
-
-const MenuItemContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
 `;
 
 const LanguageItem = styled.div`

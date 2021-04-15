@@ -8,6 +8,8 @@ import UndoIcon from "@material-ui/icons/Undo";
 import SaveRoundedIcon from "@material-ui/icons/SaveRounded";
 import ClearRoundedIcon from "@material-ui/icons/ClearRounded";
 import { ClearAllRounded } from "@material-ui/icons";
+import { Beforeunload, useBeforeunload } from "react-beforeunload";
+
 import {
   Button,
   ButtonGroup,
@@ -56,6 +58,11 @@ export default function MousePaint(props) {
   };
   const [state, setState] = useState(paintingCanvasInitialState);
   const [error, setError] = useState("=======================================");
+  useBeforeunload(() => {
+    // if (thisCanvas.current.getSaveData().includes("points")) {
+    "You'll lose your data!";
+    // }
+  });
 
   const saveDrawingToDB = (canvasData, letter) => {
     const canvasDBObj = db
@@ -114,6 +121,8 @@ export default function MousePaint(props) {
 
   return (
     <div className="draw">
+      <Beforeunload onBeforeunload={() => "You'll lose your drawing!"} />
+
       <h3>
         Drawing...{letter} <small>({lang})</small>
       </h3>
