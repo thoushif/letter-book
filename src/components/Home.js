@@ -1,28 +1,43 @@
-import { Fragment, useContext } from "react";
+import { Fragment, useContext, useEffect } from "react";
 import styled from "styled-components";
-import {
-  BrowserRouter as Router,
-  Route,
-  Link,
-  Switch,
-  useHistory
-} from "react-router-dom";
+import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
+import { db } from "./firebase";
+
 import ReadAlphabets from "./Alphabets/ReadAlphabets";
 import firebase from "firebase/app";
-
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import Languages from "./Languages";
 import { UserContext } from "./providers/UserProvider";
 
 import ShowNames from "./ShowNames/ShowNames";
 import LetterPreview from "./ShowNames/LetterPreview";
-import { Button, Typography } from "@material-ui/core";
+import {
+  Avatar,
+  Button,
+  ButtonGroup,
+  Typography,
+  withStyles
+} from "@material-ui/core";
 import { HeaderLogo } from "./Header/HeaderLogo";
 import { Favorites } from "./HomeLanugages/Favorites";
 
-export default function Home() {
-  const user = useContext(UserContext);
-  const history = useHistory();
-
+export default function Home({ user }) {
+  useEffect(() => {
+    if (user) {
+      const canvasDBObj = db.collection("users").doc(user.uid);
+      canvasDBObj.get().then((doc) => {
+        if (!doc.exists) {
+          db.collection("users").doc(user.uid).set({
+            userId: user.uid,
+            userName: user.displayName,
+            photoURL: user.photoURL,
+            loggedInAt: firebase.firestore.FieldValue.serverTimestamp(),
+            isActive: true
+          });
+        }
+      });
+    }
+  }, [user]);
   const logOut = () => {
     const result = window.confirm("Are you sure you want to logout?");
     if (result) {
@@ -45,12 +60,30 @@ export default function Home() {
           <HeaderLogo />
           {/* <MenuBookIcon color="action" /> */}
         </Link>
-        <LogoutButton onClick={logOut}>Logout</LogoutButton>
-        <Button className="floatRight" component={Link} to={"/profile"}>
-          Profile
-          {/* <MenuBookIcon color="action" /> */}
-        </Button>
-        <Typography variant="subtitle1">Hi {user.displayName} !</Typography>
+        <ButtonGroup variant="text" className="floatRight">
+          <Button
+            // variant="contained"
+            color="primary"
+            size="small"
+            className="floatRight"
+            component={Link}
+            to={"/profile"}
+          >
+            <Avatar
+              styles={{ width: "10%" }}
+              alt={user.displayName}
+              src={user.photoURL}
+            />
+
+            {/* <MenuBookIcon color="action" /> */}
+          </Button>{" "}
+          <Button variant="contained" size="small" onClick={logOut}>
+            <ExitToAppIcon color="secondary" />
+          </Button>
+        </ButtonGroup>
+        <Typography variant="h6" color="secondary">
+          Hi {user.displayName} !
+        </Typography>
         <MenuItemContainer>
           {/* <Link to="/see-your-name">See Your Name</Link> */}
           {/* <LanguageItem key="all-languages">
@@ -88,45 +121,31 @@ const Header = () => (
   </Fragment>
 );
 // Home Page
-
+const WhiteTextTypography = withStyles({
+  root: {
+    color: "black",
+    textShadow: "0px 0px 15px  #FFFFFF",
+    fontSize: "1.5em"
+  }
+})(Typography);
 // Draw Page
 const Draw = () => <Fragment> {<Languages />}</Fragment>;
 
 export const SiteDetails = ({ signinPage }) => (
   <Fragment>
     <Typography variant="body1" gutterBottom></Typography>
-    <Typography variant="body1" gutterBottom>
+    <WhiteTextTypography variant="body1" color="textSecondary" gutterBottom>
       The Place where you can show how do you draw the letters of your language
-    </Typography>
-    <Typography variant="body1" gutterBottom>
+    </WhiteTextTypography>
+    <WhiteTextTypography variant="body1" gutterBottom>
       If you start learning new language, put in the drawing and seek the
       quality of your letter
-    </Typography>
+    </WhiteTextTypography>
     <Typography variant="body1" gutterBottom>
       {!signinPage && <Languages />}
     </Typography>
   </Fragment>
 );
-
-const LogoutButton = styled.button`
-  background: transparent;
-  border: 2px solid palevioletred;
-  border-radius: 3px;
-  color: palevioletred;
-  margin: 0 1em;
-  padding: 0.25em 1em;
-  float: right;
-`;
-
-const FavoritesButton = styled.button`
-  background: transparent;
-  border: 2px solid palevioletred;
-  border-radius: 3px;
-  color: palevioletred;
-  margin: 0 1em;
-  padding: 0.25em 1em;
-  float: right;
-`;
 
 const Container = styled.div`
   /* trbl */

@@ -9,9 +9,10 @@ export const HeaderLogo = () => (
 );
 
 const Title = styled.div`
-  background: linear-gradient(lightblue, #dfdcda);
+  /* background: linear-gradient(lightblue, #dfdcda); */
   /* height: 50px; */
-  color: green;
+  color: white;
+  text-shadow: 2px 2px black;
   /* font-size: 220%; */
   /* display: flex; */
 `;

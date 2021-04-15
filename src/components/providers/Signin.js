@@ -11,7 +11,7 @@ const Signin = () => {
       <HeaderLogo />
       <SiteDetails signinPage />
       <SignIn>
-        <Typography>
+        <Typography variant="h4">
           Come on in! Join and show how good you can write!!
         </Typography>
 
@@ -32,6 +32,7 @@ export default Signin;
 
 const Container = styled.div`
   /* trbl */
+  color: black;
   margin: 0 250px 10px 250px;
   @media (max-width: 1000px) {
     flex-direction: column;
@@ -40,7 +41,8 @@ const Container = styled.div`
   /* display: inline-flex; */
 `;
 const SignIn = styled.div`
-  color: green;
+  color: black;
+  text-shadow: 2px 2px white;
   margin: 50px;
   padding: 0.25em 1em;
 `;

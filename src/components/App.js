@@ -4,5 +4,5 @@ import { UserContext } from "./providers/UserProvider";
 import Signin from "./providers/Signin";
 export default function App() {
   const user = useContext(UserContext);
-  return <Fragment>{!user ? <Signin /> : <Home />}</Fragment>;
+  return <Fragment>{!user ? <Signin /> : <Home user={user} />}</Fragment>;
 }

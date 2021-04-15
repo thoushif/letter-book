@@ -1,7 +1,13 @@
 body {
+  background: url(https://cdn.pixabay.com/photo/2015/07/02/10/40/writing-828911_960_720.jpg);
+
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+
+  background-size: cover;
   background-color: #dfdcda;
 }
-/* trbl */
 
 .language {
   text-decoration: none;

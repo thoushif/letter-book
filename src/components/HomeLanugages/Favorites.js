@@ -1,4 +1,9 @@
-import { Button, CircularProgress, Typography } from "@material-ui/core";
+import {
+  Avatar,
+  Button,
+  CircularProgress,
+  Typography
+} from "@material-ui/core";
 import { Fragment, useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { db } from "../firebase";
@@ -97,10 +102,9 @@ export const Favorites = () => {
 
   return (
     <div>
-      {process.env.NODE_ENV}
       {userObj && (
         <div>
-          <img src={userObj.photoURL} alt="profile" />
+          <Avatar alt={userObj.displayName} src={userObj.photoURL} />
           <Typography>{userObj.email}</Typography>
         </div>
       )}
