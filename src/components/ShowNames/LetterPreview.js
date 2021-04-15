@@ -347,19 +347,12 @@ const MousePaintPreviewContainer = styled.div`
   /* margin: 10px auto; */
 `;
 const MousePaintPreviewItem = styled.div`
-  background-color: white;
+  box-shadow: 0px 2px 2px 2px grey;
   border-radius: 5px;
-  border: 2px solid #aea7a1;
   font-size: 120%;
   padding: 20px;
   background-color: white;
-  border-radius: 5px;
-  border-color: black;
-  border: 2px solid #aea7a1;
-  flex-direction: column;
   margin: 20px auto;
-  color: black;
-  font-size: 120%;
   padding: 20px;
   :hover {
     background-color: #ebf7ee;

@@ -6,7 +6,13 @@ import styled from "styled-components";
 import MousePaintPreview from "../MousePaintPreview";
 import { db } from "../firebase";
 import { useHistory } from "react-router-dom";
-import { Button, Grid, Typography, CircularProgress } from "@material-ui/core";
+import {
+  Button,
+  Grid,
+  Typography,
+  CircularProgress,
+  ButtonGroup
+} from "@material-ui/core";
 import { Usage } from "./Usage";
 
 export default function ReadAlphabets({
@@ -105,33 +111,38 @@ export default function ReadAlphabets({
         {showOnlyDrawn ? showOnlyDrawn + langDB.pluralSymbol : "Showing all"}
       </Typography>
 
-      <ShowAlphabetsHeader alphabets={alphabetsDB.alphabets} lang={lang} />
-
       <FilterContainer>
-        {langDB.types &&
-          langDB.types.map((type) => (
-            <Button
-              key={type}
-              className="floatRight"
-              size="small"
-              onClick={() => {
-                setShowOnlyDrawn(type);
-              }}
-            >
-              {type + langDB.pluralSymbol}
-            </Button>
-          ))}
+        <ButtonGroup>
+          {langDB.types &&
+            langDB.types.map((type) => (
+              <Button
+                key={type}
+                // className="floatRight"
+                size="small"
+                color="action"
+                variant="contained"
+                onClick={() => {
+                  setShowOnlyDrawn(type);
+                }}
+              >
+                {type + langDB.pluralSymbol}
+              </Button>
+            ))}
 
-        <Button
-          className="floatRight"
-          size="small"
-          onClick={() => {
-            setShowOnlyDrawn("");
-          }}
-        >
-          ALL
-        </Button>
+          <Button
+            // className="floatRight"
+            size="small"
+            color="action"
+            variant="contained"
+            onClick={() => {
+              setShowOnlyDrawn("");
+            }}
+          >
+            ALL
+          </Button>
+        </ButtonGroup>
       </FilterContainer>
+      <ShowAlphabetsHeader alphabets={alphabetsDB.alphabets} lang={lang} />
       {/* todo: this will be the social feed  NOT for all alphabets*/}
       <MousePaintPreviewContainer>
         {alphabetsDB.alphabets && alphabetsDB.alphabets.length <= 0 ? (
@@ -194,13 +205,15 @@ const MousePaintPreviewContainer = styled.div`
 `;
 
 const FilterContainer = styled.div`
-  margin-bottom: 20px;
+  /* margin-bottom: -40px; */
+  /* align-items: right; */
   float: right;
 `;
 const MousePaintPreviewItem = styled.div`
   background-color: white;
   border-radius: 5px;
-  border: 2px solid #aea7a1;
+  box-shadow: 0px 2px 2px 2px grey;
+  /* border: 2px solid #aea7a1; */
   flex-direction: column;
   margin: 20px auto;
   color: black;

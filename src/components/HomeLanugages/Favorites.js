@@ -1,3 +1,5 @@
+import MailIcon from "@material-ui/icons/Mail";
+import styled from "styled-components";
 import {
   Avatar,
   Button,
@@ -148,26 +150,57 @@ export const Favorites = () => {
       ) : (
         <NoFavoriteLetter />
       )}
+      <FooterContainer>
+        <Typography gutterBottom>
+          Designed and Developed by
+          <a href="https://www.linkedin.com/in/thoushifaazam"> Thoushif </a>
+        </Typography>{" "}
+        <Typography variant="caption">
+          <a href="mailto:a.complete.letterbook@gmail.com">
+            <MailIcon fontSize="small" />
+          </a>
+          Any bugs, suggestions
+        </Typography>{" "}
+      </FooterContainer>
     </div>
   );
 };
 
 const NoFavoriteLanguage = () => (
   <Fragment>
-    <Typography color="secondary">Not yet favorited any! See how!!</Typography>
+    <Typography color="secondary">
+      Not yet favorited any! Go home to see languages, and then!!
+    </Typography>
 
     <Typography gutterBottom variant="h4" color="textSecondary">
       English <StarOutlineOutlinedIcon /> <ArrowBackIcon className="flasher" />
+    </Typography>
+    <Typography gutterBottom variant="h4" color="textSecondary">
+      Telugu
     </Typography>
   </Fragment>
 );
 
 const NoFavoriteLetter = () => (
   <Fragment>
-    <Typography color="secondary">Not yet favorited any! See how!!</Typography>
+    <Typography color="secondary">
+      Not yet favorited any! Go to a particular letter and then!!
+    </Typography>
 
     <Typography gutterBottom variant="h4" color="textSecondary">
       A <StarOutlineOutlinedIcon /> <ArrowBackIcon className="flasher" />
     </Typography>
+    <Typography gutterBottom variant="h4" color="textSecondary">
+      B
+    </Typography>
   </Fragment>
 );
+
+const FooterContainer = styled.div`
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 2rem;
+  background-image: linear-gradient(grey, white);
+  text-align: center;
+`;
