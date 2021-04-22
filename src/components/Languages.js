@@ -38,7 +38,11 @@ export default function Languages(props) {
               ></StarOutlineOutlinedIcon>
             )}
           </Tooltip>
-          {filterLanguages && "Filtered Favorite languages"}
+
+          <Typography variant="caption">
+            {" "}
+            {filterLanguages && "Filtered Favorite languages"}
+          </Typography>
           <CustomizedAccordions
             languages={langDB}
             filterLanguages={filterLanguages}

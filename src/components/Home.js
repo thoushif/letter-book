@@ -8,6 +8,7 @@ import firebase from "firebase/app";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import Languages from "./Languages";
 import { UserContext } from "./providers/UserProvider";
+import ReactPlayer from "react-player";
 
 import ShowNames from "./ShowNames/ShowNames";
 import LetterPreview from "./ShowNames/LetterPreview";
@@ -60,7 +61,20 @@ export default function Home({ user }) {
           <HeaderLogo />
           {/* <MenuBookIcon color="action" /> */}
         </Link>
-        <ButtonGroup variant="text" className="floatRight">
+
+        <ButtonGroup variant="outlined" className="floatRight">
+          <Button size="small" component={Link} to={`/draw`}>
+            <Typography
+              variant="caption"
+              style={{
+                textDecoration: "none",
+                color: "black",
+                textShadow: "0px 0px 15px  #FFFFFF"
+              }}
+            >
+              ALL LANGUAGES
+            </Typography>
+          </Button>
           <Button
             // variant="contained"
             color="primary"
@@ -82,14 +96,13 @@ export default function Home({ user }) {
           </Button>
         </ButtonGroup>
         <WhiteTextTypography variant="h4" color="secondary">
-          Hi {user.displayName} !
+          Hi {user.displayName} !{" "}
         </WhiteTextTypography>
+
         {/* <MenuItemContainer> */}
         {/* <Link to="/see-your-name">See Your Name</Link> */}
         {/* <LanguageItem key="all-languages">
-            <Link className="language" to={`/draw`}>
-              ALL LANGUAGES
-            </Link>
+            
           </LanguageItem> */}
         {/* </MenuItemContainer> */}
         <Switch>
@@ -141,6 +154,13 @@ export const SiteDetails = ({ signinPage }) => (
       If you start learning new language, put in the drawing and seek the
       quality of your letter
     </WhiteTextTypography>
+
+    <ReactPlayer
+      width="400"
+      playing
+      loop
+      url="https://letterbook.s3.us-east-2.amazonaws.com/IMG_7656.MOV"
+    />
     <Typography variant="body1" gutterBottom>
       {!signinPage && <Languages />}
     </Typography>

@@ -26,34 +26,78 @@ export const Favorites = () => {
     setLoadingFavLetters(true);
     setFavoriteLetters(favoriteLettersInitState);
 
-    const favoriteLetters = db
-      .collection("favorites")
-      .doc(user)
-      .collection("letters")
-      .get();
-    favoriteLetters.then((favoriteLetters) => {
-      // console.log("favoriteLang", favoriteLang);
-      favoriteLetters.forEach(function (favoriteLetter) {
-        if (favoriteLetter.data().isActive) {
-          let favObj = {
-            favletter: favoriteLetter.data().letter,
-            favlang: favoriteLetter.data().lang
-          };
-          setFavoriteLetters((favoriteletters) => ({
-            favoriteLetters: [...favoriteletters.favoriteLetters, favObj]
-          }));
-        }
+    db.collection("languages")
+      .get()
+      .then((snapshot) => {
+        snapshot.forEach((doc) => {
+          console.log("yyyyyyyyy", doc.data());
+
+          if (doc.data().enabled) {
+            const favoriteLetters = db
+              .collection("favorites")
+              .doc(user)
+              .collection("languages")
+              .doc(doc.data().name)
+              .collection("letters")
+              .get();
+            favoriteLetters.then((favoriteLetters) => {
+              console.log("favoriteLetters", favoriteLetters);
+              favoriteLetters.forEach(function (favoriteLetter) {
+                if (favoriteLetter.data().isActive) {
+                  let favObj = {
+                    favletter: favoriteLetter.data().letter,
+                    favlang: favoriteLetter.data().lang
+                  };
+                  console.log("favObj", favObj);
+                  setFavoriteLetters((favoriteletters) => ({
+                    favoriteLetters: [
+                      ...favoriteletters.favoriteLetters,
+                      favObj
+                    ]
+                  }));
+                }
+              });
+            });
+          }
+        });
+        setLoadingFavLetters(false);
+
+        // let lng = [];
+        // lng = snapshot.docs.map((doc) => doc.data()).map((e) => e);
+        // console.log("abbbbbbbbbbbbbbbbbbbbbbbbbbbb", lng);
       });
-    });
-    Promise.all([favoriteLetters]).then(() => {
-      console.log("loading letters------finished->");
-      setLoadingFavLetters(false);
-    });
+
+    // const favoriteLetters = db
+    //   .collection("favorites")
+    //   .doc(user)
+    //   .collection("lanugages")
+    //   .doc("english")
+    //   .collection("letters")
+    //   .get();
+    // favoriteLetters.then((favoriteLetters) => {
+    //   // console.log("favoriteLang", favoriteLang);
+    //   favoriteLetters.forEach(function (favoriteLetter) {
+    //     if (favoriteLetter.data().isActive) {
+    //       let favObj = {
+    //         favletter: favoriteLetter.data().letter,
+    //         favlang: favoriteLetter.data().lang
+    //       };
+    //       setFavoriteLetters((favoriteletters) => ({
+    //         favoriteLetters: [...favoriteletters.favoriteLetters, favObj]
+    //       }));
+    //     }
+    //   });
+    // });
+    // Promise.all([favoriteLetters]).then(() => {
+    //   console.log("loading letters------finished->");
+    //   setLoadingFavLetters(false);
+    // });
   };
   const favoritelanguagesInitState = { favoritelanguages: [] };
   const [favoritelanguages, setFavoritelanguages] = useState(
     favoritelanguagesInitState
   );
+
   const readFavoriteLangFromDB = (user) => {
     setLoadingFavLangs(true);
     setFavoritelanguages(favoritelanguagesInitState);
@@ -136,25 +180,36 @@ export const Favorites = () => {
       {loadingFavLetters ? (
         <CircularProgress />
       ) : favoriteLetters.favoriteLetters.length > 0 ? (
-        favoriteLetters.favoriteLetters.map((fav) => (
-          <Button key={fav.favletter}>
-            <Typography
-              variant="h4"
-              color="primary"
-              onClick={() => routeChange(fav.favlang, fav.favletter)}
-            >
-              {fav.favletter}
-            </Typography>
-          </Button>
-        ))
+        <Fragment>
+          {favoriteLetters.favoriteLetters.map((fav) => (
+            <Button key={fav.favletter}>
+              {fav.favlang}
+              {"-"}
+              <Typography
+                variant="h4"
+                color="primary"
+                onClick={() => routeChange(fav.favlang, fav.favletter)}
+              >
+                {fav.favletter}
+              </Typography>
+            </Button>
+          ))}
+        </Fragment>
       ) : (
         <NoFavoriteLetter />
       )}
       <FooterContainer>
         <Typography gutterBottom>
           Designed and Developed by
-          <a href="https://www.linkedin.com/in/thoushifaazam"> Thoushif </a>
-        </Typography>{" "}
+          <a
+            target="_blank"
+            rel="noreferrer"
+            href="https://www.linkedin.com/in/thoushifaazam"
+          >
+            {" "}
+            Thoushif
+          </a>
+        </Typography>
         <Typography variant="caption">
           <a href="mailto:a.complete.letterbook@gmail.com">
             <MailIcon fontSize="small" />
@@ -197,10 +252,12 @@ const NoFavoriteLetter = () => (
 );
 
 const FooterContainer = styled.div`
-  right: 0;
-  bottom: 0;
-  left: 0;
-  padding: 2rem;
+  /* right: 0; */
+  margin: auto;
+  position: absolute;
+  /* bottom: 0; */
+  /* left: 0; */
+  /* padding: 2rem; */
   background-image: linear-gradient(grey, white);
   text-align: center;
 `;
