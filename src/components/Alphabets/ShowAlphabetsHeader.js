@@ -9,22 +9,41 @@ export const ShowAlphabetsHeader = ({ alphabets, lang }) => {
   };
   return (
     <AlphabetItemContainer>
-      {/* {alphabets.length} */}
       {alphabets &&
-        alphabets.map((alphabetsObj) => (
-          // <AlphabetItem key={alphabet}>
-          <Chip
-            key={alphabetsObj.alphabet}
-            color="primary"
-            label={alphabetsObj.alphabet.toUpperCase()}
-            size="medium"
-            // deleteIcon={<ClearIcon />}
-            onClick={() => routeChange(lang, alphabetsObj.alphabet)}
-            // onDelete={() => deletethisAlphabet(lang, alphabet)}
-            // avatar={<Avatar>{alphabet.toUpperCase()}</Avatar>}
-          />
+        alphabets.map(
+          (alphabetsObj) => (
+            // <AlphabetItem key={alphabet}>
+
+            <Chip
+              key={alphabetsObj.alphabet}
+              color="primary"
+              label={alphabetsObj.alphabet.toUpperCase()}
+              size="medium"
+              // deleteIcon={<ClearIcon />}
+              onClick={() => routeChange(lang, alphabetsObj.alphabet)}
+              // onDelete={() => deletethisAlphabet(lang, alphabet)}
+              // avatar={<Avatar>{alphabet.toUpperCase()}</Avatar>}
+            />
+          )
+
+          // ) : (
+          //   favletters &&
+          //   favletters.include(alphabetsObj.alphabet) && (
+          //     <Chip
+          //       key={alphabetsObj.alphabet}
+          //       color="primary"
+          //       label={alphabetsObj.alphabet.toUpperCase()}
+          //       size="medium"
+          //       // deleteIcon={<ClearIcon />}
+          //       onClick={() => routeChange(lang, alphabetsObj.alphabet)}
+          //       // onDelete={() => deletethisAlphabet(lang, alphabet)}
+          //       // avatar={<Avatar>{alphabet.toUpperCase()}</Avatar>}
+          //     />
+          //   )
+          // )
           // </AlphabetItem>
-        ))}
+        )}
+
       {/* <AlphabetItem key={lang}>
         <Link className="seeyourname" to={`/see-your-name/${lang}`}>
           See your Name

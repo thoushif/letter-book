@@ -321,7 +321,6 @@ export default function VoteButtons({ letter, userId, self }) {
           dislikes{" "}
         </Typography>
       </Button>
-      {votesByPpl.likedppl}
       <Dialog open={openPreview} onClose={() => handleCloseVotePreview()}>
         {votesByPpl.likedppl && votesByPpl.dislikedPpl && (
           <Voters votedPpl={votesByPpl} />

@@ -3,7 +3,7 @@ import CanvasDraw from "react-canvas-draw";
 import { UserContext } from "./providers/UserProvider";
 import { db } from "./firebase";
 import firebase from "firebase/app";
-import { SliderPicker } from "react-color";
+import { HuePicker } from "react-color";
 import UndoIcon from "@material-ui/icons/Undo";
 import SaveRoundedIcon from "@material-ui/icons/SaveRounded";
 import ClearRoundedIcon from "@material-ui/icons/ClearRounded";
@@ -13,12 +13,12 @@ import { Beforeunload, useBeforeunload } from "react-beforeunload";
 import {
   Button,
   ButtonGroup,
-  Divider,
   Grid,
   makeStyles,
   Tooltip,
   Typography
 } from "@material-ui/core";
+import { FavoriteColor } from "./HomeLanugages/FavoriteColor";
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1
@@ -112,7 +112,14 @@ export default function MousePaint(props) {
     props.setOtherPaints([]);
   }
   const handleColorChange = (color) => {
+    console.log(
+      "inside mouse paint, ",
+      state.color,
+      " and colro hex is",
+      color.hex
+    );
     setState({ ...state, color: color.hex });
+    console.log("after mouse paint, ", state.color);
   };
   const handleBrushChange = (size) => {
     setState({ ...state, brushRadius: Number(size) });
@@ -126,15 +133,22 @@ export default function MousePaint(props) {
       <h3>
         Drawing...{letter} <small>({lang})</small>
       </h3>
-      <Grid container justify="center" spacing={0}>
+      <Grid container justify="center" spacing={2}>
         <Grid key="1" item xs={8}>
-          <SliderPicker
+          <HuePicker
             color={state.color}
             className={classes.brushcolor}
             onChangeComplete={handleColorChange}
           />
         </Grid>
-        <Grid key="2" item xs={2}></Grid>
+        <Grid key="2" item xs={2}>
+          <FavoriteColor
+            brushColor={state.color}
+            brushSize={state.brushRadius}
+            state={state}
+            setState={setState}
+          />
+        </Grid>
         <Grid key="3" item xs={8}>
           <CanvasDraw
             // className={classes.paper}
@@ -150,35 +164,38 @@ export default function MousePaint(props) {
         </Grid>
         <Grid key="4" item xs={2}>
           <ButtonGroup
-            variant="contained"
-            color="primary"
+            // variant="contained"
+            // color="primary"
             orientation="vertical"
             aria-label="contained primary button group"
           >
-            <Button onClick={() => handleBrushChange("2")}>
-              <Tooltip title="small">
+            <Tooltip title="small">
+              <Button
+                onClick={() => handleBrushChange("2")}
+                // style={{ backgroundColor: state.color }}
+              >
                 <div
                   className="circleBase type1"
                   style={{ backgroundColor: state.color }}
                 ></div>
-              </Tooltip>
-            </Button>
-            <Button onClick={() => handleBrushChange("4")}>
-              <Tooltip title="medium">
+              </Button>
+            </Tooltip>
+            <Tooltip title="medium">
+              <Button onClick={() => handleBrushChange("4")}>
                 <div
                   className="circleBase type2"
                   style={{ backgroundColor: state.color }}
                 ></div>
-              </Tooltip>
-            </Button>
-            <Button onClick={() => handleBrushChange("6")}>
-              <Tooltip title="large">
+              </Button>
+            </Tooltip>
+            <Tooltip title="large">
+              <Button onClick={() => handleBrushChange("6")}>
                 <div
                   className="circleBase type3"
                   style={{ backgroundColor: state.color }}
                 ></div>
-              </Tooltip>
-            </Button>
+              </Button>
+            </Tooltip>
           </ButtonGroup>
           <ButtonGroup
             orientation="vertical"
@@ -237,7 +254,7 @@ export default function MousePaint(props) {
               }}
             >
               <Tooltip title="Cancel and go back">
-                <ClearRoundedIcon color="secondary" fontSize="small" />
+                <ClearRoundedIcon color="secondary" />
               </Tooltip>
             </Button>
           </ButtonGroup>

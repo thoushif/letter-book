@@ -56,8 +56,6 @@ export default function LetterPreview({ lang, letter }) {
             };
             setAlphabetsDB(letterObjJson);
 
-            console.log("current letter index", letter.data().index);
-
             const nextLetterIndex = letter.data().index + 1;
             const nextLetterObj = alphabetsLangObj
               .doc(doc.id)
@@ -66,7 +64,6 @@ export default function LetterPreview({ lang, letter }) {
               .get();
             nextLetterObj.then((nextLetters) => {
               nextLetters.forEach(function (nextLetter) {
-                console.log(nextLetter.data());
                 let letterObjJson = {
                   alphabet: nextLetter.data().alphabet
                 };
@@ -82,7 +79,6 @@ export default function LetterPreview({ lang, letter }) {
               .get();
             prevLetterObj.then((prevLetters) => {
               prevLetters.forEach(function (prevLetter) {
-                console.log(prevLetter.data());
                 let letterObjJson = {
                   alphabet: prevLetter.data().alphabet
                 };
@@ -115,6 +111,8 @@ export default function LetterPreview({ lang, letter }) {
     const favoriteLetters = db
       .collection("favorites")
       .doc(user)
+      .collection("languages")
+      .doc(lang)
       .collection("letters")
       .get();
     favoriteLetters.then((favoriteLetters) => {
@@ -137,6 +135,8 @@ export default function LetterPreview({ lang, letter }) {
     const favoriteObj = db
       .collection("favorites")
       .doc(userObj.uid)
+      .collection("languages")
+      .doc(lang)
       .collection("letters")
       .doc(letter)
       .get();
@@ -144,26 +144,42 @@ export default function LetterPreview({ lang, letter }) {
       if (doc.exists) {
         db.collection("favorites")
           .doc(userObj.uid)
+          .collection("languages")
+          .doc(lang)
           .collection("letters")
           .doc(letter)
           .update({
             isActive: false
           });
-        console.log(doc.data());
+        // console.log(doc.data());
       }
     });
     setForceRefresh(!forceRefresh);
     Promise.all([favoriteObj]).then(() => {
-      console.log("un favouriting------finished->");
+      // console.log("un favouriting------finished->");
       setForceRefresh((forceRefresh) => !forceRefresh);
     });
   };
 
   const favouriteThisLetter = (e, letter) => {
     e.stopPropagation();
+    db.collection("favorites")
+      .doc(userObj.uid)
+      .collection("languages")
+      .doc(lang)
+      .set(
+        {
+          language: lang,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+          isActive: true
+        },
+        { merge: true }
+      );
 
     db.collection("favorites")
       .doc(userObj.uid)
+      .collection("languages")
+      .doc(lang)
       .collection("letters")
       .doc(letter)
       .set(
