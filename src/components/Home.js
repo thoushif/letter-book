@@ -154,16 +154,15 @@ export const SiteDetails = ({ signinPage }) => (
       If you start learning new language, put in the drawing and seek the
       quality of your letter
     </WhiteTextTypography>
-
+    <Typography variant="body1" gutterBottom>
+      {!signinPage && <Languages />}
+    </Typography>
     <ReactPlayer
       width="400"
       playing
       loop
-      url="https://letterbook.s3.us-east-2.amazonaws.com/IMG_7656.MOV"
+      url="https://letterbook.s3.us-east-2.amazonaws.com/Homepage.MOV"
     />
-    <Typography variant="body1" gutterBottom>
-      {!signinPage && <Languages />}
-    </Typography>
   </Fragment>
 );
 
