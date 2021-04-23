@@ -25,11 +25,15 @@ export const ShowAlphabetsHeader = ({
                 .filter((alphabet) => alphabet.line === i + 1)
                 .filter((alphabet) => {
                   if (
-                    favoriteLetters &&
-                    favoriteLetters.favoriteLetters.length <= 0
-                  )
+                    favoriteLetters === undefined ||
+                    (favoriteLetters &&
+                      favoriteLetters.favoriteLetters.length <= 0)
+                  ) {
                     return true;
-                  else {
+                  } else if (
+                    favoriteLetters &&
+                    favoriteLetters.favoriteLetters.length > 0
+                  ) {
                     return favoriteLetters.favoriteLetters.includes(
                       alphabet.alphabet
                     );
