@@ -1,55 +1,72 @@
 import { Chip } from "@material-ui/core";
+import { Fragment } from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
-export const ShowAlphabetsHeader = ({ alphabets, lang }) => {
+export const ShowAlphabetsHeader = ({
+  alphabets,
+  lang,
+  lines,
+  favoriteLetters
+}) => {
   const history = useHistory();
   const routeChange = (lang, alphabet) => {
     let path = `/draw/${lang}/${alphabet}`;
     history.push(path);
   };
   return (
-    <AlphabetItemContainer>
-      {alphabets &&
-        alphabets.map(
-          (alphabetsObj) => (
-            // <AlphabetItem key={alphabet}>
+    <Fragment>
+      {/* {favoriteLetters.favoriteLetters} */}
+      {lines ? (
+        [...Array(lines)].map((e, i) => (
+          <AlphabetItemContainer key={i}>
+            {/* {alphabet.line + "at "+ i + 1 + "th time"} */}
+            {alphabets &&
+              alphabets
+                .filter((alphabet) => alphabet.line === i + 1)
+                .filter((alphabet) => {
+                  if (favoriteLetters.favoriteLetters.length <= 0) return true;
+                  else {
+                    return favoriteLetters.favoriteLetters.includes(
+                      alphabet.alphabet
+                    );
+                  }
+                })
+                .map((alphabetsObj) => (
+                  // <AlphabetItem key={alphabet}>
 
-            <Chip
-              key={alphabetsObj.alphabet}
-              color="primary"
-              label={alphabetsObj.alphabet.toUpperCase()}
-              size="medium"
-              // deleteIcon={<ClearIcon />}
-              onClick={() => routeChange(lang, alphabetsObj.alphabet)}
-              // onDelete={() => deletethisAlphabet(lang, alphabet)}
-              // avatar={<Avatar>{alphabet.toUpperCase()}</Avatar>}
-            />
-          )
-
-          // ) : (
-          //   favletters &&
-          //   favletters.include(alphabetsObj.alphabet) && (
-          //     <Chip
-          //       key={alphabetsObj.alphabet}
-          //       color="primary"
-          //       label={alphabetsObj.alphabet.toUpperCase()}
-          //       size="medium"
-          //       // deleteIcon={<ClearIcon />}
-          //       onClick={() => routeChange(lang, alphabetsObj.alphabet)}
-          //       // onDelete={() => deletethisAlphabet(lang, alphabet)}
-          //       // avatar={<Avatar>{alphabet.toUpperCase()}</Avatar>}
-          //     />
-          //   )
-          // )
-          // </AlphabetItem>
-        )}
-
-      {/* <AlphabetItem key={lang}>
-        <Link className="seeyourname" to={`/see-your-name/${lang}`}>
-          See your Name
-        </Link>
-      </AlphabetItem> */}
-    </AlphabetItemContainer>
+                  <Chip
+                    key={alphabetsObj.alphabet + i}
+                    color="primary"
+                    label={alphabetsObj.alphabet.toUpperCase()}
+                    size="medium"
+                    // deleteIcon={<ClearIcon />}
+                    onClick={() => routeChange(lang, alphabetsObj.alphabet)}
+                    // onDelete={() => deletethisAlphabet(lang, alphabet)}
+                    // avatar={<Avatar>{alphabet.toUpperCase()}</Avatar>}
+                  />
+                ))}
+          </AlphabetItemContainer>
+        ))
+      ) : (
+        <AlphabetItemContainer>
+          {alphabets &&
+            alphabets
+              .filter((alphabet) => alphabet.line === 1)
+              .map((alphabetsObj) => (
+                <Chip
+                  key={alphabetsObj.alphabet}
+                  color="primary"
+                  label={alphabetsObj.alphabet.toUpperCase()}
+                  size="medium"
+                  // deleteIcon={<ClearIcon />}
+                  onClick={() => routeChange(lang, alphabetsObj.alphabet)}
+                  // onDelete={() => deletethisAlphabet(lang, alphabet)}
+                  // avatar={<Avatar>{alphabet.toUpperCase()}</Avatar>}
+                />
+              ))}
+        </AlphabetItemContainer>
+      )}
+    </Fragment>
   );
 };
 

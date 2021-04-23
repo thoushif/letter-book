@@ -2,10 +2,11 @@ import { Fragment, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { db } from "./firebase";
 import styled from "styled-components";
-import { Container, Tooltip, Typography } from "@material-ui/core";
+import { Container, Tooltip, Typography, withStyles } from "@material-ui/core";
 import CustomizedAccordions from "./HomeLanugages/CustomizedAccordions";
 import StarOutlineOutlinedIcon from "@material-ui/icons/StarOutlineOutlined";
 import StarOutlinedIcon from "@material-ui/icons/StarOutlined";
+import FilterListRoundedIcon from "@material-ui/icons/FilterListRounded";
 
 export default function Languages(props) {
   const languageprop = props.languageprop;
@@ -27,6 +28,7 @@ export default function Languages(props) {
     <Container>
       {!languageprop ? (
         <Fragment>
+          <FilterListRoundedIcon />
           <Tooltip title="filter by favorite">
             {filterLanguages ? (
               <StarOutlinedIcon
@@ -51,7 +53,9 @@ export default function Languages(props) {
       ) : (
         <LanguageItem key={languageprop}>
           <Link className="language" to={`/draw/${languageprop}`}>
-            <Typography variant="h5">{props.children}</Typography>
+            <WhiteTextTypography variant="h6">
+              {props.children}
+            </WhiteTextTypography>
           </Link>
         </LanguageItem>
       )}
@@ -60,3 +64,11 @@ export default function Languages(props) {
 }
 
 const LanguageItem = styled.div``;
+const WhiteTextTypography = withStyles({
+  root: {
+    color: "black",
+    textShadow: "0px 0px 15px  #FFFFFF",
+    fontSize: "1.5em"
+  }
+})(Typography);
+// Draw Page

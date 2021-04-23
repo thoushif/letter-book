@@ -17,6 +17,7 @@ import {
 import { Usage } from "./Usage";
 import StarOutlinedIcon from "@material-ui/icons/StarOutlined";
 import { UserContext } from "../providers/UserProvider";
+import FilterListRoundedIcon from "@material-ui/icons/FilterListRounded";
 
 export default function ReadAlphabets({
   match: {
@@ -37,6 +38,7 @@ export default function ReadAlphabets({
           name: doc.data().name,
           displayName: doc.data().displayName,
           types: doc.data().types,
+          lines: doc.data().lines,
           pluralSymbol: doc.data().pluralSymbol
         };
         setLangDB(langDBObj);
@@ -78,6 +80,8 @@ export default function ReadAlphabets({
           }
         });
       });
+    } else {
+      setFavoriteLetters(favoriteLettersInitState);
     }
 
     let letters;
@@ -120,6 +124,7 @@ export default function ReadAlphabets({
               usage: letter.data().usage,
               type: letter.data().type,
               alphabet: letter.data().alphabet,
+              line: letter.data().line,
               pronunciationAudioSrc: letter.data().pronunciationAudioSrc
             };
             setAlphabetsDB((alphabetsDB) => ({
@@ -160,6 +165,16 @@ export default function ReadAlphabets({
 
       <FilterContainer>
         <ButtonGroup>
+          <Button
+            // className="floatRight"
+            size="small"
+            color="action"
+            variant="text"
+            disableRipple
+            disableFocusRipple
+          >
+            <FilterListRoundedIcon />
+          </Button>
           {langDB.types &&
             langDB.types.map((type) => (
               <Button
@@ -202,7 +217,12 @@ export default function ReadAlphabets({
           </Button>
         </ButtonGroup>
       </FilterContainer>
-      <ShowAlphabetsHeader alphabets={alphabetsDB.alphabets} lang={lang} />
+      <ShowAlphabetsHeader
+        alphabets={alphabetsDB.alphabets}
+        lang={lang}
+        lines={langDB.lines}
+        favoriteLetters={favoriteLetters}
+      />
       {/* todo: this will be the social feed  NOT for all alphabets*/}
       <MousePaintPreviewContainer>
         {alphabetsDB.alphabets && alphabetsDB.alphabets.length <= 0 ? (

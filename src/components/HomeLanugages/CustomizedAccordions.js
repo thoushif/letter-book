@@ -14,7 +14,6 @@ import { UserContext } from "../providers/UserProvider";
 import firebase from "firebase/app";
 import StarOutlinedIcon from "@material-ui/icons/StarOutlined";
 import { Button } from "@material-ui/core";
-
 import { useContext } from "react";
 const Accordion = withStyles({
   root: {
@@ -87,7 +86,8 @@ export default function CustomizedAccordions({ languages, filterLanguages }) {
           letters.then((letters) => {
             letters.forEach(function (letter) {
               let letterObjJson = {
-                alphabet: letter.data().alphabet
+                alphabet: letter.data().alphabet,
+                line: letter.data().line
               };
               setAlphabetsDB((alphabetsDB) => ({
                 alphabets: [...alphabetsDB.alphabets, letterObjJson]
@@ -248,6 +248,7 @@ export default function CustomizedAccordions({ languages, filterLanguages }) {
                     <ShowAlphabetsHeader
                       alphabets={alphabetsDB.alphabets}
                       lang={lang.name}
+                      lines={lang.lines}
                     />
                   )}
                   {/* {alphabetsDB.alphabets} */}

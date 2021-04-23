@@ -12,6 +12,8 @@ import { db } from "../firebase";
 import { UserContext } from "../providers/UserProvider";
 import StarOutlineOutlinedIcon from "@material-ui/icons/StarOutlineOutlined";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+import BrushIcon from "@material-ui/icons/Brush";
+
 export const Favorites = () => {
   const userObj = useContext(UserContext);
 
@@ -93,6 +95,36 @@ export const Favorites = () => {
     //   setLoadingFavLetters(false);
     // });
   };
+  const favoriteBrushInitState = {
+    color: { hex: "#000000" },
+    size: "medium"
+  };
+
+  const [favoriteBrush, setFavoriteBrush] = useState(favoriteBrushInitState);
+  const readFavoriteBrushFromDB = (user) => {
+    setFavoriteBrush(favoriteBrushInitState);
+    const dbFav = db
+      .collection("favorites")
+      .doc(user)
+      .collection("brush")
+      .doc("color-size")
+      .get();
+    dbFav.then((favoriteBrushDB) => {
+      console.log("favoriteBrush=====", favoriteBrushDB.data());
+      if (
+        favoriteBrushDB !== undefined &&
+        favoriteBrushDB.data() !== undefined
+      ) {
+        let favBrush = {
+          color: {
+            hex: favoriteBrushDB.data().color
+          },
+          size: favoriteBrushDB.data().size
+        };
+        setFavoriteBrush(favBrush);
+      }
+    });
+  };
   const favoritelanguagesInitState = { favoritelanguages: [] };
   const [favoritelanguages, setFavoritelanguages] = useState(
     favoritelanguagesInitState
@@ -136,6 +168,7 @@ export const Favorites = () => {
       readFavoriteLangFromDB(userObj.uid);
 
       readFavoriteLettersFromDB(userObj.uid);
+      readFavoriteBrushFromDB(userObj.uid);
     }
     return cleanup;
   }, []);
@@ -161,14 +194,12 @@ export const Favorites = () => {
         <CircularProgress />
       ) : favoritelanguages.favoritelanguages.length > 0 ? (
         favoritelanguages.favoritelanguages.map((fav) => (
-          <Button key={fav}>
-            <Typography
-              variant="h4"
-              color="primary"
-              onClick={() => routeChange(fav)}
-            >
-              {fav}
-            </Typography>
+          <Button
+            variant="contained"
+            key={fav}
+            onClick={() => routeChange(fav)}
+          >
+            <Typography color="primary">{fav}</Typography>
           </Button>
         ))
       ) : (
@@ -182,14 +213,14 @@ export const Favorites = () => {
       ) : favoriteLetters.favoriteLetters.length > 0 ? (
         <Fragment>
           {favoriteLetters.favoriteLetters.map((fav) => (
-            <Button key={fav.favletter}>
+            <Button
+              key={fav.favletter}
+              variant="contained"
+              onClick={() => routeChange(fav.favlang, fav.favletter)}
+            >
               {fav.favlang}
               {"-"}
-              <Typography
-                variant="h4"
-                color="primary"
-                onClick={() => routeChange(fav.favlang, fav.favletter)}
-              >
+              <Typography variant="h4" color="primary">
                 {fav.favletter}
               </Typography>
             </Button>
@@ -198,6 +229,21 @@ export const Favorites = () => {
       ) : (
         <NoFavoriteLetter />
       )}
+      <Typography gutterBottom variant="h5">
+        Favorite Brush Color/Size:
+      </Typography>
+      <Button variant="contained">
+        <BrushIcon
+          fontSize={
+            favoriteBrush.size !== 2
+              ? favoriteBrush.size === 4
+                ? "medium"
+                : "large"
+              : "small"
+          }
+          style={{ fill: favoriteBrush.color.hex }}
+        />
+      </Button>
       <FooterContainer>
         <Typography gutterBottom>
           Designed and Developed by
@@ -255,7 +301,7 @@ const FooterContainer = styled.div`
   /* right: 0; */
   margin: auto;
   position: absolute;
-  /* bottom: 0; */
+  bottom: 0;
   /* left: 0; */
   /* padding: 2rem; */
   background-image: linear-gradient(grey, white);

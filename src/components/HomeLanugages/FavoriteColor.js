@@ -103,7 +103,6 @@ const DBFavColor = ({ state, setState }) => {
     color: { hex: "#000000" },
     size: "medium"
   };
-  const [favoriteBrush, setFavoriteBrush] = useState(favoriteBrushInitState);
 
   const favoriteBrushes = db
     .collection("favorites")
@@ -117,12 +116,13 @@ const DBFavColor = ({ state, setState }) => {
       brushRadius: Number(favoriteBrush.size)
     });
   };
+  const [favoriteBrush, setFavoriteBrush] = useState(favoriteBrushInitState);
   const readFavoriteBrushFromDB = () => {
     setFavoriteBrush(favoriteBrushInitState);
     const dbFav = favoriteBrushes.doc("color-size").get();
     dbFav.then((favoriteBrush) => {
       console.log("favoriteBrush=====", favoriteBrush.data());
-      if (favoriteBrush.data().isActive) {
+      if (favoriteBrush !== undefined && favoriteBrush.data() !== undefined) {
         let favBrush = {
           color: {
             hex: favoriteBrush.data().color
