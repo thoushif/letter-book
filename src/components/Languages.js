@@ -64,7 +64,7 @@ export default function Languages(props) {
 }
 
 const LanguageItem = styled.div``;
-const WhiteTextTypography = withStyles({
+export const WhiteTextTypography = withStyles({
   root: {
     color: "black",
     textShadow: "0px 0px 15px  #FFFFFF",

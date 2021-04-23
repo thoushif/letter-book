@@ -4,6 +4,7 @@ import {
   Avatar,
   Button,
   CircularProgress,
+  Paper,
   Typography
 } from "@material-ui/core";
 import { Fragment, useContext, useEffect, useState } from "react";
@@ -13,6 +14,7 @@ import { UserContext } from "../providers/UserProvider";
 import StarOutlineOutlinedIcon from "@material-ui/icons/StarOutlineOutlined";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import BrushIcon from "@material-ui/icons/Brush";
+import { WhiteTextTypography } from "../Languages";
 
 export const Favorites = () => {
   const userObj = useContext(UserContext);
@@ -24,6 +26,15 @@ export const Favorites = () => {
   const [favoriteLetters, setFavoriteLetters] = useState(
     favoriteLettersInitState
   );
+  const groupBy = (key) => (array) =>
+    array.reduce((objectsByKeyValue, obj) => {
+      const value = obj[key];
+      objectsByKeyValue[value] = (objectsByKeyValue[value] || []).concat(obj);
+      return objectsByKeyValue;
+    }, {});
+  const favoritesByLang = groupBy("favlang");
+
+  const [favoriteLettersGroupedBy, setFavoriteLettersGroupedBy] = useState();
   const readFavoriteLettersFromDB = (user) => {
     setLoadingFavLetters(true);
     setFavoriteLetters(favoriteLettersInitState);
@@ -63,7 +74,17 @@ export const Favorites = () => {
           }
         });
         setLoadingFavLetters(false);
-
+        console.log(
+          "favoriteLetters.favoriteLetters",
+          favoriteLetters.favoriteLetters
+        );
+        console.log(
+          "favoritesByLang",
+          favoritesByLang(favoriteLetters.favoriteLetters)
+        );
+        setFavoriteLettersGroupedBy(
+          favoritesByLang(favoriteLetters.favoriteLetters)
+        );
         // let lng = [];
         // lng = snapshot.docs.map((doc) => doc.data()).map((e) => e);
         // console.log("abbbbbbbbbbbbbbbbbbbbbbbbbbbb", lng);
@@ -177,6 +198,7 @@ export const Favorites = () => {
     setFavoriteLetters(favoriteLettersInitState);
     setLoadingFavLetters(false);
     setLoadingFavLangs(false);
+    setFavoriteLettersGroupedBy();
   };
 
   return (
@@ -187,9 +209,9 @@ export const Favorites = () => {
           <Typography>{userObj.email}</Typography>
         </div>
       )}
-      <Typography gutterBottom variant="h5">
+      <WhiteTextTypography gutterBottom variant="h5">
         Favorite Languages
-      </Typography>
+      </WhiteTextTypography>
       {loadingFavLangs ? (
         <CircularProgress />
       ) : favoritelanguages.favoritelanguages.length > 0 ? (
@@ -205,14 +227,14 @@ export const Favorites = () => {
       ) : (
         <NoFavoriteLanguage />
       )}
-      <Typography gutterBottom variant="h5">
+      <WhiteTextTypography gutterBottom variant="h5">
         Favorite Letters
-      </Typography>
+      </WhiteTextTypography>
       {loadingFavLetters ? (
         <CircularProgress />
       ) : favoriteLetters.favoriteLetters.length > 0 ? (
         <Fragment>
-          {favoriteLetters.favoriteLetters.map((fav) => (
+          {/* {favoriteLetters.favoriteLetters.map((fav) => (
             <Button
               key={fav.favletter}
               variant="contained"
@@ -224,14 +246,48 @@ export const Favorites = () => {
                 {fav.favletter}
               </Typography>
             </Button>
-          ))}
+          ))} */}
+          {/* {favoriteLetters.favoriteLetters
+            ? [...Array(favoritesByLang(favoriteLetters.favoriteLetters))].map(
+                (e, i) => {
+                  return <p>{e.english.favletter}</p>;
+                }
+              )
+            : "not yet grouped"} */}
+          {Object.keys(favoritesByLang(favoriteLetters.favoriteLetters)).map(
+            (key, i) => (
+              <span key={i}>
+                <WhiteTextTypography>{key.toUpperCase()}</WhiteTextTypography>
+                <span>
+                  {favoritesByLang(favoriteLetters.favoriteLetters)[key].map(
+                    (a) => {
+                      return (
+                        <Button
+                          styles={{
+                            marginLeft: "5px"
+                          }}
+                          key={a.favletter}
+                          variant="contained"
+                          onClick={() => routeChange(a.favlang, a.favletter)}
+                        >
+                          <Typography variant="h4" color="primary">
+                            {a.favletter}
+                          </Typography>
+                        </Button>
+                      );
+                    }
+                  )}
+                </span>
+              </span>
+            )
+          )}
         </Fragment>
       ) : (
         <NoFavoriteLetter />
       )}
-      <Typography gutterBottom variant="h5">
+      <WhiteTextTypography gutterBottom variant="h5">
         Favorite Brush Color/Size:
-      </Typography>
+      </WhiteTextTypography>
       <Button variant="contained">
         <BrushIcon
           fontSize={
