@@ -24,7 +24,11 @@ export const ShowAlphabetsHeader = ({
               alphabets
                 .filter((alphabet) => alphabet.line === i + 1)
                 .filter((alphabet) => {
-                  if (favoriteLetters.favoriteLetters.length <= 0) return true;
+                  if (
+                    favoriteLetters &&
+                    favoriteLetters.favoriteLetters.length <= 0
+                  )
+                    return true;
                   else {
                     return favoriteLetters.favoriteLetters.includes(
                       alphabet.alphabet
