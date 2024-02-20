@@ -157,12 +157,6 @@ export const SiteDetails = ({ signinPage }) => (
     <Typography variant="body1" gutterBottom>
       {!signinPage && <Languages />}
     </Typography>
-    <ReactPlayer
-      width="400"
-      playing
-      loop
-      url="https://letterbook.s3.us-east-2.amazonaws.com/Homepage.MOV"
-    />
   </Fragment>
 );
 
